@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Exa&family=Montserrat:wght@400;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.font-lexend {
+  font-family: 'Lexend Exa', sans-serif;
+}
+
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
