@@ -16,7 +16,7 @@ const Navbar = () => {
   }, [auth]);
 
   return (
-    <div className='flex px-10 py-5 text-xl justify-between mx-10 my-5 text-white bg-black rounded-xl top-0 sticky'>
+    <div className='flex px-10 py-5 text-xl justify-between mx-10 my-5 text-white bg-black rounded-xl top-5 sticky'>
       <h1 className='font-lexend'>
         <Link href='/'>{'{LeetPath}'}</Link>
       </h1>
