@@ -3,57 +3,74 @@ from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
 from bson import ObjectId
-from flask import Flask, render_template, jsonify, request
 import json
 from flask_cors import CORS
+import re
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})  # In production, specify allowed origins
 
 def getDatabase():
     load_dotenv()
-    uri = os.getenv("MONGO_URI") + "&tlsAllowInvalidCertificates=true"
-    client = MongoClient(uri)
+    uri = os.getenv("MONGO_URI")
+    if not uri:
+        raise ValueError("MONGO_URI environment variable not set")
+    
+    client = MongoClient(uri, tlsAllowInvalidCertificates=False)  # Use False in production
     try:
-        client = MongoClient(uri)
         return client.Weed
-    except:
+    except Exception as e:
+        print(f"Error connecting to the database: {e}")
         return None
 
 #####################################
-#                                   #
 #            User Data              #
-#                                   #
 #####################################
 
+def is_valid_email(email):
+    return re.match(r"[^@]+@[^@]+\.[^@]+", email)
 
-@app.route('/getUserData', methods=['GET'])
+@app.route('/getUserData', methods=['POST'])
 def getUserData():
     db = getDatabase()
     data = request.json
+    if not data or 'email' not in data or not is_valid_email(data['email']):
+        return jsonify({"status": False, "message": "Invalid email"}), 400
+
     try:
         userData = db.user.find_one({"email": data["email"]})
-        userData["status"] = True
-        userData["_id"] = str(userData["_id"])
-        return jsonify(userData)
+        if userData:
+            userData["status"] = True
+            userData["_id"] = str(userData["_id"])
+            return jsonify(userData)
+        else:
+            return jsonify({"status": False, "message": "User not found"}), 404
     except Exception as e:
-        print(e)
-        return jsonify({"status": False})
-    
+        print(f"Error retrieving user data: {e}")
+        return jsonify({"status": False, "message": "Server error"}), 500
 
 @app.route('/addUser', methods=['POST'])
 def addUser():
     db = getDatabase()
     data = request.json
+    
+    # Check if required fields are present
+    required_fields = ["email", "username", "name", "solved", "institution"]
+    if not all(field in data and data[field] for field in required_fields):
+        return jsonify({"status": False, "message": "Missing or empty fields"}), 400
+    
+    # Validate email format
+    if not is_valid_email(data["email"]):
+        return jsonify({"status": False, "message": "Invalid email format"}), 400
+
     try:
-        if not all(data.get(x, False) for x in ["email", "username", "name", "solved", "institution"]):
-            return jsonify({"status": False})
-        data = db.user.insert_one(data).inserted_id
-        print(data)
-        return jsonify({"status": True})
+        # Insert new user into the database
+        inserted_id = db.user.insert_one(data).inserted_id
+        print(f"Inserted user with ID: {inserted_id}")
+        return jsonify({"status": True, "inserted_id": str(inserted_id)}), 201
     except Exception as e:
-        print(e)
-        return jsonify({"status": False})
+        print(f"Error adding user: {e}")
+        return jsonify({"status": False, "message": "Server error"}), 500
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

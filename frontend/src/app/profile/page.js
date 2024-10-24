@@ -22,7 +22,7 @@ const Profile = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      router.push('/register'); // Redirect to Register after logout
+      router.push('/register'); 
     } catch (error) {
       console.error("Error signing out: ", error.message);
     }
