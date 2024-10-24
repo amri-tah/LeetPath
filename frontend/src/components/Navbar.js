@@ -14,16 +14,22 @@ const Navbar = () => {
     });
     return () => unsubscribe(); 
   }, [auth]);
-
+  const Navigations = [
+    ["Home", "/#"], 
+    ["Problems", "/#"], 
+    ["Team", "/#"]
+  ]; 
   return (
     <div className='flex px-10 py-5 text-xl justify-between mx-10 my-5 text-white bg-black rounded-xl top-5 sticky'>
       <h1 className='font-lexend'>
         <Link href='/'>{'{LeetPath}'}</Link>
       </h1>
       <div className='flex gap-10 font-montserrat'>
-        <h1>
-          <Link href='/'>Home</Link>
+      {Navigations.map((element, index) => (
+        <h1 key={index}>
+          <Link href={element[1]}>{element[0]}</Link>
         </h1>
+      ))}
         {user ? (
           <Link href='/profile'>
             Profile
