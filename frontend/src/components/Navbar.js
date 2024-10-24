@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import app from '../../config.js'; // Ensure this path is correct for your setup
+import app from '../../config.js';
 
 const Navbar = () => {
   const [user, setUser] = useState(null);
@@ -10,9 +10,9 @@ const Navbar = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser); // Set user state based on authentication status
+      setUser(currentUser);
     });
-    return () => unsubscribe(); // Cleanup subscription on unmount
+    return () => unsubscribe(); 
   }, [auth]);
 
   return (
