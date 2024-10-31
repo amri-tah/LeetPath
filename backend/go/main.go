@@ -25,17 +25,17 @@ var db *mongo.Database
 type User struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
 	Email       string             `json:"email" binding:"required"`
-	Username    string             `json:"username" binding:"required"`
-	Name        string             `json:"name" binding:"required"`
-	Solved      Solved             `json:"solved" binding:"required"`
-	Institution string             `json:"institution" binding:"required"`
-	Status      bool               `json:"status"`
+	Username    string             `json:"username,omitempty"`
+	Name        string             `json:"name,omitempty"`
+	Solved      Solved             `json:"solved,omitempty"`
+	Institution string             `json:"institution,omitempty"`
+	Status      bool               `json:"status,omitempty"`
 }
 
 type Solved struct {
-	Easy   int `json:"easy" binding:"required"`
-	Medium int `json:"medium" binding:"required"`
-	Hard   int `json:"hard" binding:"required"`
+	Easy   int `json:"easy,omitempty"`
+	Medium int `json:"medium,omitempty"`
+	Hard   int `json:"hard,omitempty"`
 }
 
 type GraphQLRequest struct {
@@ -297,26 +297,30 @@ func getUserData(c *gin.Context) {
 
 func addUser(c *gin.Context) {
 	var user User
+
 	if err := c.ShouldBindJSON(&user); err != nil || !isValidEmail(user.Email) {
 		c.JSON(http.StatusBadRequest, gin.H{"status": false, "message": "Invalid email or missing fields"})
 		return
 	}
 
+	// Set default values if fields are missing
 	if user.Username == "" {
 		atIndex := len(user.Email)
 		if idx := regexp.MustCompile(`@`).FindStringIndex(user.Email); idx != nil {
 			atIndex = idx[0]
 		}
-		user.Username = user.Email[:atIndex]
+		user.Username = user.Email[:atIndex] // Use part of email as username
 	}
 
 	if user.Name == "" {
-		user.Name = "N/A"
+		user.Name = "N/A" // Default value for Name
 	}
+
 	if user.Institution == "" {
-		user.Institution = "N/A"
+		user.Institution = "N/A" // Default value for Institution
 	}
-	if user.Solved == (Solved{}) {
+
+	if user.Solved == (Solved{}) { // Check if Solved is empty
 		user.Solved = Solved{
 			Easy:   0,
 			Medium: 0,
@@ -324,12 +328,14 @@ func addUser(c *gin.Context) {
 		}
 	}
 
+	// Insert the user into the database
 	result, err := db.Collection("user").InsertOne(context.Background(), user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Server error"})
 		return
 	}
 
+	// Respond with the created user ID
 	c.JSON(http.StatusCreated, gin.H{"status": true, "inserted_id": result.InsertedID})
 }
 
