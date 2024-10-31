@@ -34,6 +34,7 @@ const Register = () => {
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+      
       router.push("/profile");
     } catch (error) {
       setError("Error with email authentication: " + error.message);
@@ -41,7 +42,7 @@ const Register = () => {
   };
 
   return (
-    <div className='flex flex-col items-center justify-center py-[3%] bg-gray-100'>
+    <div className='bg-gray-900 flex flex-col items-center justify-center py-[5%]'>
       <div className='bg-white p-8 rounded-lg shadow-lg max-w-md w-full'>
         <h1 className='text-2xl font-bold mb-4 text-center'>Sign Up</h1>
 
