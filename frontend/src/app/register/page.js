@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import app from "../../../config.js"; // Ensure this path is correct for your setup
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'; 
 import { useRouter } from 'next/navigation';
@@ -16,7 +16,11 @@ const Register = () => {
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const userEmail = result.user.email;
+      console.log(userEmail);
+      await addUserToAPI(userEmail);
+
       router.push("/profile");
     } catch (error) {
       setError("Error signing in with Google: " + error.message);
@@ -33,11 +37,32 @@ const Register = () => {
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userEmail = userCredential.user.email;
+
+      await addUserToAPI(userEmail);
+
       router.push("/profile");
     } catch (error) {
       setError("Error with email authentication: " + error.message);
+    }
+  };
+
+  const addUserToAPI = async (userEmail) => {
+    try {
+      const response = await fetch('https://leetpath-go.onrender.com/addUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: userEmail }),
+      });
+      const data = await response.json();
+      if (!data.status) {
+        console.error("Failed to add user:", data.message);
+      }
+    } catch (error) {
+      console.error("Error adding user:", error.message);
     }
   };
 
