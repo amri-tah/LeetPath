@@ -20,7 +20,8 @@ const Navbar = () => {
     ["Team", "/#"]
   ]; 
   return (
-    <div className='flex px-10 py-5 text-xl justify-between mx-10 my-5 text-white bg-black rounded-xl top-5 sticky'>
+    <div className='bg-gray-900 px-10 pt-6'>
+<div className='flex px-10 py-5 text-xl justify-between text-white bg-black rounded-xl top-5 sticky'>
       <h1 className='font-lexend'>
         <Link href='/'>{'{LeetPath}'}</Link>
       </h1>
@@ -41,6 +42,8 @@ const Navbar = () => {
         )}
       </div>
     </div>
+    </div>
+    
   );
 };
 
