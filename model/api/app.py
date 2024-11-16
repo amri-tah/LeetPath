@@ -40,11 +40,7 @@ class QuestionRecommender:
 
     def load_user_skill_levels(self):
         # Load the user skill levels from a JSON file
-        try:
-            with open(self.skill_file, 'r') as f:
-                return json.load(f)
-        except FileNotFoundError:
-            return {} 
+        return requests.get("https://leetpath-go.onrender.com/emails-skills").json()
 
     def calculate_similarity_matrix(self):
         question_vectors = TfidfVectorizer().fit_transform(self.df['question'])
@@ -205,7 +201,15 @@ class QuestionRecommender:
         response = requests.post(UPDATE_USER_URL, json={"email": user_id, "skill": self.user_skill_levels[user_id]})
         response.raise_for_status()
 
+
+print("Loading  Model....")
 recommender = QuestionRecommender(file_path="updated_data.json")
+print("Model Loaded....")
+print("API Initialized....")
+
+@app.route("/", methods=["GET"])
+def home():
+    return "API is Runnning "
 
 @app.route('/recommend', methods=['POST'])
 def recommend():
