@@ -386,6 +386,34 @@ func updateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": true, "message": "User data updated"})
 }
 
+func getAllEmailsAndSkills(c *gin.Context) {
+	cursor, err := db.Collection("user").Find(context.Background(), bson.M{})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Error fetching users from database"})
+		return
+	}
+	defer cursor.Close(context.Background())
+
+	emailSkillMap := make(map[string]int64)
+
+	for cursor.Next(context.Background()) {
+		var user User
+		if err := cursor.Decode(&user); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Error decoding user data"})
+			return
+		}
+
+		emailSkillMap[user.Email] = user.Skill
+	}
+
+	if err := cursor.Err(); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Cursor error"})
+		return
+	}
+
+	c.JSON(http.StatusOK, emailSkillMap)
+}
+
 func corsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -414,6 +442,7 @@ func main() {
 	router.POST("/problemSet", fetchQuestions)
 	router.POST("/problemData", getProblemData)
 	router.POST("/getStats", getStats)
+	router.GET("/emails-skills", getAllEmailsAndSkills)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
