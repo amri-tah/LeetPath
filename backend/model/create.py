@@ -1,4 +1,3 @@
-from flask import Flask, request, jsonify
 import json
 import numpy as np
 import pandas as pd
@@ -6,27 +5,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import MinMaxScaler
 import networkx as nx
-import requests
-import os
 from threading import Lock
 import pickle
-
-app = Flask(__name__)
-
-recommender = None
-recommender_lock = Lock()
-
-def get_recommender():
-    global recommender
-    with recommender_lock:
-        if recommender is None:
-            if os.path.exists("recommender.pkl"):
-                print("Loading saved recommender...")
-                recommender = QuestionRecommender.load_recommender("recommender.pkl")
-                print("Recommender loaded.")
-            else:
-                raise RuntimeError("Recommender file not found!")
-    return recommender
 
 class QuestionRecommender:
     def __init__(self, file_path="data.json"):
@@ -197,27 +177,6 @@ class QuestionRecommender:
             return recommender
 
 
-@app.route("/", methods=["GET"])
-def home():
-    return "API is Runnning on Azure Web Service"
-
-@app.route('/recommend', methods=['POST'])
-def recommend():
-    try:
-        recommender = get_recommender()
-        data = request.json
-        count = data.get('count',10)
-        solved_questions = data.get('solved_questions', ["two-sum"])
-
-        if  not isinstance(solved_questions, list):
-            return jsonify({"error": "Invalid input data. Provide 'solved_questions' list."}), 400
-
-        recommendations = recommender.recommend_questions( solved_questions,count)
-        return jsonify({"recommendations": recommendations})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
-# [END gae_flex_quickstart]
+recommender = QuestionRecommender(file_path="data.json")
+recommender.save_recommender("recommender.pkl")
+print("Recommender created and saved.")

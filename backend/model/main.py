@@ -1,3 +1,19 @@
+# Copyright 2015 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# [START gae_flex_quickstart]
+
 from flask import Flask, request, jsonify
 import json
 import numpy as np
@@ -7,25 +23,26 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import MinMaxScaler
 import networkx as nx
 import requests
-import os
 from threading import Lock
 import pickle
 
 app = Flask(__name__)
 
-recommender = None
 recommender_lock = Lock()
+recommender = None
 
 def get_recommender():
     global recommender
     with recommender_lock:
-        if recommender is None:
-            if os.path.exists("recommender.pkl"):
-                print("Loading saved recommender...")
-                recommender = QuestionRecommender.load_recommender("recommender.pkl")
-                print("Recommender loaded.")
-            else:
-                raise RuntimeError("Recommender file not found!")
+        try:
+            if recommender is None:
+                print("Loading Model....")
+                recommender = QuestionRecommender(file_path="data.json")
+                print("Model Loaded....")
+        except:
+            recommender = QuestionRecommender(file_path="data.json")
+            recommender.save_recommender("recommender.pkl")
+            print("Recommender created and saved.")
     return recommender
 
 class QuestionRecommender:
@@ -173,7 +190,7 @@ class QuestionRecommender:
                     recommendations[neighbor] = self.G[solved][neighbor]['weight']
 
         return sorted(recommendations.items(), key=lambda x: x[1], reverse=True)[:top_n]
-
+    
     def save_recommender(self, file_path="recommender.pkl"):
         with open(file_path, 'wb') as f:
             pickle.dump({
@@ -199,7 +216,7 @@ class QuestionRecommender:
 
 @app.route("/", methods=["GET"])
 def home():
-    return "API is Runnning on Azure Web Service"
+    return "API is Runnning on Google Cloud"
 
 @app.route('/recommend', methods=['POST'])
 def recommend():
