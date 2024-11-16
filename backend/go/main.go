@@ -30,6 +30,7 @@ type User struct {
 	Solved      Solved             `json:"solved,omitempty"`
 	Institution string             `json:"institution,omitempty"`
 	Status      bool               `json:"status,omitempty"`
+	Skill		int64			   `json:"skill,omitempty"`
 }
 
 type Solved struct {
@@ -37,7 +38,7 @@ type Solved struct {
 	Medium int `json:"medium,omitempty"`
 	Hard   int `json:"hard,omitempty"`
 }
-
+// Graph QL 
 type GraphQLRequest struct {
 	Query     string                 `json:"query"`
 	Variables map[string]interface{} `json:"variables"`
@@ -328,6 +329,10 @@ func addUser(c *gin.Context) {
 		}
 	}
 
+	if user.Skill == 0 {
+		user.Skill = 1
+	}
+
 	// Insert the user into the database
 	result, err := db.Collection("user").InsertOne(context.Background(), user)
 	if err != nil {
@@ -381,6 +386,34 @@ func updateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": true, "message": "User data updated"})
 }
 
+func getAllEmailsAndSkills(c *gin.Context) {
+	cursor, err := db.Collection("user").Find(context.Background(), bson.M{})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Error fetching users from database"})
+		return
+	}
+	defer cursor.Close(context.Background())
+
+	emailSkillMap := make(map[string]int64)
+
+	for cursor.Next(context.Background()) {
+		var user User
+		if err := cursor.Decode(&user); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Error decoding user data"})
+			return
+		}
+
+		emailSkillMap[user.Email] = user.Skill
+	}
+
+	if err := cursor.Err(); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Cursor error"})
+		return
+	}
+
+	c.JSON(http.StatusOK, emailSkillMap)
+}
+
 func corsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -409,6 +442,7 @@ func main() {
 	router.POST("/problemSet", fetchQuestions)
 	router.POST("/problemData", getProblemData)
 	router.POST("/getStats", getStats)
+	router.GET("/emails-skills", getAllEmailsAndSkills)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"

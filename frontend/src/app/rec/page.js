@@ -11,7 +11,7 @@ export default function Home() {
 
   const getRecommendation = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/recommend');
+      const response = await axios.post('http://127.0.0.1:5000/recommend');
       setQuestion(response.data);
     } catch (error) {
       console.error('No more questions available');
@@ -20,7 +20,7 @@ export default function Home() {
   const submitAttempt = async (solved, timeTaken, liked) => {
     if (!question) return; // Early return if `question` is null
     try {
-      const response = await axios.post('http://localhost:5000/attempt', {
+      const response = await axios.post('http://127.0.0.1:5000/attempt', {
         question_id: question.question_id,
         solved,
         time_taken: timeTaken,
