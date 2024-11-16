@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth, signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
+import { IoPersonCircleOutline } from "react-icons/io5";
 
 const Profile = () => {
   const [loading, setLoading] = useState(true);
@@ -98,9 +99,41 @@ const Profile = () => {
   return (
     <div className='bg-gray-900 flex flex-row items-start justify-center min-h-screen py-[3%]'>
       <div className='bg-white p-8 rounded-lg shadow-lg w-3/5 mx-4 flex flex-col my-[5%]'>
-        <h1 className='text-2xl font-bold mb-4 text-center'>Profile</h1>
+        <h1 className='text-2xl font-bold text-center'>Profile</h1>
         {user ? (
           <>
+          
+          <IoPersonCircleOutline className='w-[100px] h-[100px] mx-auto'/>
+          <div className='flex items-center justify-center gap-10'>
+          {isEditing && (
+            <div >
+              {/* Upload Image Button */}
+              <button
+                onClick={() => document.getElementById('fileInput').click()}
+                className="bg-blue-500 text-white py-1 px-4 rounded-md hover:bg-blue-700 mr-2"
+              >
+                Upload Image
+              </button>
+
+              {/* Delete Image Button */}
+              <button
+                className="bg-red-500 text-white py-1 px-4 rounded-md hover:bg-red-700"
+              >
+                Delete Image
+              </button>
+
+              {/* Hidden file input for uploading image */}
+              <input
+                id="fileInput"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                // onChange={handleImageUpload}
+              />
+            </div>
+          )}
+          </div>
+          
             <p className='text-center mb-4'>Welcome, {user.email}</p>
             {userData ? (
               <div className='flex flex-row'>
