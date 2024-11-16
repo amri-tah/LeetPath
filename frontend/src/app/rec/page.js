@@ -2,10 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaCheckCircle, FaTimesCircle, FaArrowRight } from 'react-icons/fa';
+import ConfettiLayout from '../../components/Confetti.js'
 
 export default function Home() {
   const [question, setQuestion] = useState(null);
   const [userSkill, setUserSkill] = useState(null);
+  const [showConfetti, setShowConfetti] = useState(false); // State to control confetti visibility
 
   const getRecommendation = async () => {
     try {
@@ -15,7 +17,6 @@ export default function Home() {
       console.error('No more questions available');
     }
   };
-
   const submitAttempt = async (solved, timeTaken, liked) => {
     if (!question) return; // Early return if `question` is null
     try {
@@ -27,6 +28,12 @@ export default function Home() {
       });
       setUserSkill(response.data.user_skill);
       await getRecommendation();
+
+      // If the user solved the question correctly, trigger confetti
+      if (solved) {
+        setShowConfetti(true); // Show confetti
+        setTimeout(() => setShowConfetti(false), 5000); // Hide confetti after 5 seconds
+      }
     } catch (error) {
       console.error(error);
     }
@@ -90,6 +97,7 @@ export default function Home() {
             </a>
           )}
         </div>
+        {showConfetti && <ConfettiLayout />} 
       </div>
     </div>
   );
