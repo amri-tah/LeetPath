@@ -38,7 +38,7 @@ type Solved struct {
 	Medium int `json:"medium,omitempty"`
 	Hard   int `json:"hard,omitempty"`
 }
-
+// Graph QL 
 type GraphQLRequest struct {
 	Query     string                 `json:"query"`
 	Variables map[string]interface{} `json:"variables"`
