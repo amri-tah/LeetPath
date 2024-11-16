@@ -248,5 +248,5 @@ def recommend():
 if __name__ == "__main__":
     # This is used when running locally only. When deploying to Google App
     # Engine, a webserver process such as Gunicorn will serve the app.
-    app.run(host="127.0.0.1", port=8080, debug=True)
+    app.run(host="0.0.0.0", port=10000, debug=True)
 # [END gae_flex_quickstart]
