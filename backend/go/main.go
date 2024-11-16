@@ -30,6 +30,7 @@ type User struct {
 	Solved      Solved             `json:"solved,omitempty"`
 	Institution string             `json:"institution,omitempty"`
 	Status      bool               `json:"status,omitempty"`
+	Skill		int64			   `json:"skill,omitempty"`
 }
 
 type Solved struct {
@@ -326,6 +327,10 @@ func addUser(c *gin.Context) {
 			Medium: 0,
 			Hard:   0,
 		}
+	}
+
+	if user.Skill == 0 {
+		user.Skill = 1
 	}
 
 	// Insert the user into the database

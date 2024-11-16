@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Load problem data from a JSON file
-with open("model\problem_data.json", 'r') as file:
+with open("data.json", 'r') as file:
     problem_data = json.load(file)
 
 class Question:
