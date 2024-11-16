@@ -10,16 +10,18 @@ app = Flask(__name__)
 CORS(app)
 
 # Load problem data from a JSON file
-with open("model\problem_data.json", 'r') as file:
+with open("model\data.json", 'r') as file:
     problem_data = json.load(file)
 
 class Question:
-    def __init__(self, question_id, title, difficulty, accuracy, topics):
+    def __init__(self, question_id, title, difficulty, accuracy, topics, question, link):
         self.question_id = question_id
         self.title = title
         self.difficulty = self.map_difficulty(difficulty)
         self.accuracy = accuracy
-        self.topics = topics
+        self.topics = topics,
+        self.question = question,
+        self.link = link
 
     @staticmethod
     def map_difficulty(difficulty):
@@ -77,7 +79,9 @@ questions = [
         title=info.get("title"),
         difficulty=info.get("difficulty"),
         accuracy=info.get("accuracy"),
-        topics=info.get("topics", [])
+        topics=info.get("topics", []), 
+        question = info.get("question"),
+        link = info.get("link")
     )
     for q_id, info in problem_data.items()
 ]
@@ -92,7 +96,9 @@ def recommend_question():
             'question_id': question.question_id,
             'title': question.title,
             'difficulty': question.difficulty,
-            'topics': question.topics
+            'topics': question.topics,
+            'description': question.question,
+            'link': question.link
         })
     return jsonify({'message': 'All questions attempted.'}), 404
 
@@ -111,7 +117,7 @@ def attempt_question():
     user.skill = recommender.update_skill(user, question.difficulty, solved, time_taken)
     user.attempted_questions.add(question_id)
     if liked:
-        user.liked_topics.update(question.topics)
+        user.liked_topics.update(set(question.topics))
 
     user.history.append({
         'question_id': question_id,
