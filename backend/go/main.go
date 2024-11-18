@@ -73,28 +73,6 @@ type QuestionListResponse struct {
 	} `json:"data"`
 }
 
-func renameUsernameInFlaskAPI(oldName, newName string) error {
-	url := "https://leepath-model.el.r.appspot.com/rename" // Replace with actual Flask API URL
-	payload := map[string]string{"old_name": oldName, "new_name": newName}
-	payloadBytes, err := json.Marshal(payload)
-	if err != nil {
-		return fmt.Errorf("failed to serialize payload: %v", err)
-	}
-
-	resp, err := http.Post(url, "application/json", bytes.NewBuffer(payloadBytes))
-	if err != nil {
-		return fmt.Errorf("error calling Flask API: %v", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		body, _ := ioutil.ReadAll(resp.Body)
-		return fmt.Errorf("flask api error: %s", string(body))
-	}
-
-	return nil
-}
-
 func getSolvedQuestionsByEmail(c *gin.Context) {
 	var req struct {
 		Email string `json:"email" binding:"required"`
@@ -431,13 +409,6 @@ func updateUser(c *gin.Context) {
 		if err == nil && existingUser.Email != email {
 			delete(updateData, "username")
 			c.JSON(http.StatusConflict, gin.H{"status": false, "message": "Username already exists"})
-			return
-		}
-
-		// Call Flask API to rename username
-		err = renameUsernameInFlaskAPI(existingUser.Username, newUsername)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": fmt.Sprintf("Error renaming username: %v", err)})
 			return
 		}
 	}
