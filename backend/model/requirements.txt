@@ -7,3 +7,4 @@ scikit-learn
 networkx
 requests
 flask-cors
+google-cloud-storage
