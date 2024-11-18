@@ -12,16 +12,15 @@ from threading import Lock
 import pickle
 import io
 from google.cloud import storage
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json"
 
 client = storage.Client()
 bucket_name = "leetpath-images"
-
-
-app = Flask(__name__)
 
 recommender = None
 recommender_lock = Lock()

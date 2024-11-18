@@ -89,7 +89,7 @@ func renameUsernameInFlaskAPI(oldName, newName string) error {
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := ioutil.ReadAll(resp.Body)
-		return fmt.Errorf("Flask API error: %s", string(body))
+		return fmt.Errorf("flask api error: %s", string(body))
 	}
 
 	return nil
@@ -250,24 +250,6 @@ func fetchQuestions(c *gin.Context) {
 	c.JSON(http.StatusOK, response.Data.ProblemsetQuestionList)
 }
 
-func getStats(c *gin.Context) {
-	var req struct {
-		Email string `json:"email" binding:"required"`
-	}
-	if err := c.ShouldBindJSON(&req); err != nil || !isValidEmail(req.Email) {
-		c.JSON(http.StatusBadRequest, gin.H{"status": false, "message": "Invalid email"})
-		return
-	}
-
-	var user User
-	err := db.Collection("user").FindOne(context.Background(), bson.M{"email": req.Email}).Decode(&user)
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"status": false, "message": "User not found"})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"status": true, "userStats": user.Solved})
-}
 
 func getProblemData(c *gin.Context) {
 	var request struct {
@@ -477,6 +459,7 @@ func updateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": true, "message": "User data updated"})
 }
 
+
 func corsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -488,6 +471,164 @@ func corsMiddleware() gin.HandlerFunc {
 		}
 		c.Next()
 	}
+}
+
+func fetchLeetcodeStats(username string) (Solved, error) {
+	query := `
+	query getUserProfile($username: String!) {
+		matchedUser(username: $username) {
+			submitStats {
+				acSubmissionNum {
+					difficulty
+					count
+				}
+			}
+		}
+	}`
+
+	variables := map[string]string{"username": username}
+	payload := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+
+	payloadBytes, err := json.Marshal(payload)
+	if err != nil {
+		return Solved{}, fmt.Errorf("failed to serialize GraphQL payload: %v", err)
+	}
+
+	resp, err := http.Post("https://leetcode.com/graphql", "application/json", bytes.NewBuffer(payloadBytes))
+	if err != nil {
+		return Solved{}, fmt.Errorf("error sending request to LeetCode: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := ioutil.ReadAll(resp.Body)
+		return Solved{}, fmt.Errorf("LeetCode API error: %s", string(body))
+	}
+
+	var response struct {
+		Data struct {
+			MatchedUser struct {
+				SubmitStats struct {
+					AcSubmissionNum []struct {
+						Difficulty string `json:"difficulty"`
+						Count      int    `json:"count"`
+					} `json:"acSubmissionNum"`
+				} `json:"submitStats"`
+			} `json:"matchedUser"`
+		} `json:"data"`
+	}
+
+	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+		return Solved{}, fmt.Errorf("failed to decode LeetCode response: %v", err)
+	}
+
+	stats := response.Data.MatchedUser.SubmitStats.AcSubmissionNum
+	solved := Solved{}
+	for _, stat := range stats {
+		switch stat.Difficulty {
+		case "Easy":
+			solved.Easy = stat.Count
+		case "Medium":
+			solved.Medium = stat.Count
+		case "Hard":
+			solved.Hard = stat.Count
+		}
+	}
+	return solved, nil
+}
+
+func updateSolvedWithLeetCode(c *gin.Context) {
+	var req struct {
+		Email string `json:"email" binding:"required"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil || !isValidEmail(req.Email) {
+		c.JSON(http.StatusBadRequest, gin.H{"status": false, "message": "Invalid email"})
+		return
+	}
+
+	var user User
+	err := db.Collection("user").FindOne(context.Background(), bson.M{"email": req.Email}).Decode(&user)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"status": false, "message": "User not found"})
+		return
+	}
+
+	if user.LeetcodeUsername == "" {
+		c.JSON(http.StatusOK, gin.H{"status": true, "message": "LeetCode username not provided, skipping update"})
+		return
+	}
+
+	solved, err := fetchLeetcodeStats(user.LeetcodeUsername)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": fmt.Sprintf("Error fetching LeetCode stats: %v", err)})
+		return
+	}
+
+	_, err = db.Collection("user").UpdateOne(
+		context.Background(),
+		bson.M{"email": req.Email},
+		bson.M{"$set": bson.M{"solved": solved}},
+	)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Error updating solved stats"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": true, "message": "Solved stats updated", "solved": solved})
+}
+
+func removeSolvedQuestion(c *gin.Context) {
+	var req struct {
+		Email        string `json:"email" binding:"required"`
+		QuestionSlug string `json:"question_slug" binding:"required"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil || !isValidEmail(req.Email) {
+		c.JSON(http.StatusBadRequest, gin.H{"status": false, "message": "Invalid email or question slug"})
+		return
+	}
+
+	filter := bson.M{"email": req.Email}
+	update := bson.M{"$pull": bson.M{"solved_questions": req.QuestionSlug}}
+
+	result, err := db.Collection("user").UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Failed to remove solved question"})
+		return
+	}
+
+	if result.MatchedCount == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"status": false, "message": "User not found or question not in solved list"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": true, "message": "Question removed from solved list"})
+}
+
+
+func getStats(c *gin.Context) {
+	var req struct {
+		Email string `json:"email" binding:"required"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil || !isValidEmail(req.Email) {
+		c.JSON(http.StatusBadRequest, gin.H{"status": false, "message": "Invalid email"})
+		return
+	}
+
+	var user User
+	err := db.Collection("user").FindOne(context.Background(), bson.M{"email": req.Email}).Decode(&user)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"status": false, "message": "User not found"})
+		return
+	}
+
+	if user.Solved == (Solved{}) {
+		user.Solved = Solved{Easy: 0, Medium: 0, Hard: 0}
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": true, "userStats": user.Solved, "solved_questions": user.SolvedQuestions})
 }
 
 func main() {
@@ -507,6 +648,9 @@ func main() {
 	router.POST("/problemSet", fetchQuestions)
 	router.POST("/problemData", getProblemData)
 	router.POST("/getStats", getStats)
+	router.POST("/updateSolvedWithLeetCode", updateSolvedWithLeetCode)
+	router.POST("/removeSolvedQuestion", removeSolvedQuestion)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
