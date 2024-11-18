@@ -11,6 +11,7 @@
   "dependencies": {
     "@codemirror/lang-python": "^6.1.6",
     "@heroicons/react": "^2.1.5",
+    "@nextui-org/accordion": "^2.0.40",
     "@uiw/codemirror-theme-okaidia": "^4.23.6",
     "@uiw/react-codemirror": "^4.23.6",
     "axios": "^1.7.7",
