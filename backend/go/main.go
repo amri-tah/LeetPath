@@ -238,11 +238,40 @@ func getProblemData(c *gin.Context) {
 		return
 	}
 
-	apiURL := fmt.Sprintf("https://alfa-leetcode-api.onrender.com/select?titleSlug=%s", request.TitleSlug)
+	query := `query selectProblem($titleSlug: String!) {
+		question(titleSlug: $titleSlug) {
+			questionId
+			questionFrontendId
+			title
+			titleSlug
+			content
+			difficulty
+			exampleTestcases
+			topicTags {
+				name
+				slug
+			}
+			hints
+		}
+	}`
 
-	resp, err := http.Get(apiURL)
+	payload := map[string]interface{}{
+		"query": query,
+		"variables": map[string]string{
+			"titleSlug": request.TitleSlug,
+		},
+	}
+
+	payloadBytes, err := json.Marshal(payload)
+	if err != nil {
+		log.Printf("Error marshalling payload: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error creating request payload"})
+		return
+	}
+
+	resp, err := http.Post("https://leetcode.com/graphql", "application/json", bytes.NewBuffer(payloadBytes))
 	if err != nil || resp.StatusCode != http.StatusOK {
-		log.Printf("Error fetching data: %v", err)
+		log.Printf("Error making request: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving problem data"})
 		return
 	}
@@ -255,39 +284,43 @@ func getProblemData(c *gin.Context) {
 		return
 	}
 
-	var problemData struct {
-		Link             string `json:"link"`
-		QuestionId       string `json:"questionId"`
-		QuestionTitle    string `json:"questionTitle"`
-		TitleSlug        string `json:"titleSlug"`
-		Difficulty       string `json:"difficulty"`
-		Question         string `json:"question"`
-		ExampleTestcases string `json:"exampleTestcases"`
-		TopicTags        []struct {
-			Name string `json:"name"`
-			Slug string `json:"slug"`
-		} `json:"topicTags"`
-		Hints []string `json:"hints"`
+	var graphqlResponse struct {
+		Data struct {
+			Question struct {
+				QuestionId       string `json:"questionId"`
+				Title            string `json:"title"`
+				TitleSlug        string `json:"titleSlug"`
+				Difficulty       string `json:"difficulty"`
+				Content          string `json:"content"`
+				ExampleTestcases string `json:"exampleTestcases"`
+				TopicTags        []struct {
+					Name string `json:"name"`
+					Slug string `json:"slug"`
+				} `json:"topicTags"`
+				Hints []string `json:"hints"`
+			} `json:"question"`
+		} `json:"data"`
 	}
 
-	if err := json.Unmarshal(body, &problemData); err != nil {
+	if err := json.Unmarshal(body, &graphqlResponse); err != nil {
 		log.Printf("Error unmarshalling response: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error parsing response data"})
 		return
 	}
 
+	question := graphqlResponse.Data.Question
 	c.JSON(http.StatusOK, gin.H{
-		"link":             problemData.Link,
-		"questionId":       problemData.QuestionId,
-		"questionTitle":    problemData.QuestionTitle,
-		"titleSlug":        problemData.TitleSlug,
-		"difficulty":       problemData.Difficulty,
-		"question":         problemData.Question,
-		"exampleTestcases": problemData.ExampleTestcases,
-		"topicTags":        problemData.TopicTags,
-		"hints":            problemData.Hints,
+		"questionId":       question.QuestionId,
+		"questionTitle":    question.Title,
+		"titleSlug":        question.TitleSlug,
+		"difficulty":       question.Difficulty,
+		"content":          question.Content,
+		"exampleTestcases": question.ExampleTestcases,
+		"topicTags":        question.TopicTags,
+		"hints":            question.Hints,
 	})
 }
+
 
 func initDatabase() (*mongo.Database, error) {
 	err := godotenv.Load()
