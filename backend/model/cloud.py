@@ -14,12 +14,24 @@ bucket_name = "leetpath-images"
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    """Upload a file to Google Cloud Storage."""
+    """Upload a file to Google Cloud Storage with a specified filename."""
     try:
+        # Check if the request contains the file part
+        if 'file' not in request.files:
+            return jsonify({"error": "No file part in the request."}), 400
+
         file = request.files['file']
-        blob = client.bucket(bucket_name).blob(file.filename)
+
+        # Retrieve the desired filename from the form data
+        filename = request.form.get('filename')
+        if not filename:
+            return jsonify({"error": "No filename provided in the form data."}), 400
+
+        # Create a blob in the specified bucket with the provided filename
+        blob = client.bucket(bucket_name).blob(filename)
         blob.upload_from_file(file)
-        return jsonify({"message": f"File {file.filename} uploaded successfully."}), 200
+
+        return jsonify({"message": f"File uploaded successfully as {filename}."}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

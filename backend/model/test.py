@@ -4,16 +4,19 @@
 # #
 # #
 
-# import requests
+import requests
 
-# url = 'http://127.0.0.1:5000/upload'
-# file_path = 'data.png'
+url = 'http://127.0.0.1:5000/upload'
+file_path = 'data.png'
+desired_filename = 'user.png'
 
-# with open(file_path, 'rb') as file:
-#     files = {'file': file}
-#     response = requests.post(url, files=files)
+with open(file_path, 'rb') as file:
+    files = {'file': file}
+    data = {'filename': desired_filename}
+    response = requests.post(url, files=files, data=data)
 
-# print(response.json())
+print(response.json())
+
 
 
 
