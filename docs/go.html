@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #555;
+        }
+        code {
+            background: #f4f4f4;
+            color: #c7254e;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        pre {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 10px;
+            border-radius: 5px;
+            overflow: auto;
+        }
+        .method {
+            display: inline-block;
+            padding: 2px 6px;
+            color: #fff;
+            border-radius: 4px;
+        }
+        .GET { background: #5cb85c; }
+        .POST { background: #0275d8; }
+        .PATCH { background: #f0ad4e; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>API Documentation</h1>
+        <p>This document outlines the endpoints and usage of the API. Each endpoint's details, including its purpose, required parameters, and sample requests, are provided.</p>
+        
+        <h2>Endpoints</h2>
+
+        <!-- Example Endpoint -->
+        <h3><span class="method POST">POST</span> /getSolvedQuestions</h3>
+        <p>Retrieve solved questions for a user by their email.</p>
+        <h4>Request Parameters:</h4>
+        <ul>
+            <li><code>email</code> (string, required): The user's email address.</li>
+        </ul>
+        <h4>Sample Request:</h4>
+        <pre><code>
+fetch("http://localhost:8080/getSolvedQuestions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: "user@example.com" })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+        </code></pre>
+        <h4>Response:</h4>
+        <pre><code>
+{
+    "status": true,
+    "solved_questions": ["two-sum", "add-two-numbers"]
+}
+        </code></pre>
+
+        <!-- Add Solved Question -->
+        <h3><span class="method POST">POST</span> /addSolvedQuestion</h3>
+        <p>Add a solved question for a user.</p>
+        <h4>Request Parameters:</h4>
+        <ul>
+            <li><code>email</code> (string, required): The user's email address.</li>
+            <li><code>question_slug</code> (string, required): The question's slug.</li>
+        </ul>
+        <h4>Sample Request:</h4>
+        <pre><code>
+fetch("http://localhost:8080/addSolvedQuestion", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+        email: "user@example.com",
+        question_slug: "two-sum"
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+        </code></pre>
+        <h4>Response:</h4>
+        <pre><code>
+{
+    "status": true,
+    "message": "Question added to solved list"
+}
+        </code></pre>
+
+        <!-- Fetch Questions -->
+        <h3><span class="method POST">POST</span> /problemSet</h3>
+        <p>Fetch a list of questions from LeetCode.</p>
+        <h4>Request Parameters:</h4>
+        <ul>
+            <li><code>limit</code> (query string, optional): The number of questions to fetch. Default is 50.</li>
+        </ul>
+        <h4>Sample Request:</h4>
+        <pre><code>
+fetch("http://localhost:8080/problemSet?limit=10", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" }
+})
+.then(response => response.json())
+.then(data => console.log(data));
+        </code></pre>
+        <h4>Response:</h4>
+        <pre><code>
+{
+    "total": 100,
+    "questions": [
+        {
+            "title": "Two Sum",
+            "difficulty": "Easy",
+            "status": "ac",
+            "topicTags": ["Array", "Hash Table"]
+        },
+        ...
+    ]
+}
+        </code></pre>
+
+        <!-- Get User Data -->
+        <h3><span class="method POST">POST</span> /getUserData</h3>
+        <p>Retrieve user data by email.</p>
+        <h4>Request Parameters:</h4>
+        <ul>
+            <li><code>email</code> (string, required): The user's email address.</li>
+        </ul>
+        <h4>Sample Request:</h4>
+        <pre><code>
+fetch("http://localhost:8080/getUserData", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: "user@example.com" })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+        </code></pre>
+        <h4>Response:</h4>
+        <pre><code>
+{
+    "_id": "64abc123ef456",
+    "email": "user@example.com",
+    "username": "user123",
+    "solved_questions": ["two-sum"],
+    "status": true
+}
+        </code></pre>
+
+        <!-- Add User -->
+        <h3><span class="method POST">POST</span> /addUser</h3>
+        <p>Create a new user in the system.</p>
+        <h4>Request Parameters:</h4>
+        <ul>
+            <li><code>email</code> (string, required): The user's email address.</li>
+            <li><code>username</code> (string, optional): The user's username.</li>
+            <li><code>institution</code> (string, optional): The user's institution.</li>
+        </ul>
+        <h4>Sample Request:</h4>
+        <pre><code>
+fetch("http://localhost:8080/addUser", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+        email: "newuser@example.com",
+        username: "newuser",
+        institution: "Example University"
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+        </code></pre>
+        <h4>Response:</h4>
+        <pre><code>
+{
+    "status": true,
+    "inserted_id": "64def123ab456"
+}
+        </code></pre>
+    </div>
+</body>
+</html>
