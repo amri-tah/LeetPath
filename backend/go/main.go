@@ -23,14 +23,15 @@ import (
 var db *mongo.Database
 
 type User struct {
-	ID          primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
-	Email       string             `json:"email" binding:"required"`
-	Username    string             `json:"username,omitempty"`
-	Name        string             `json:"name,omitempty"`
-	Solved      Solved             `json:"solved,omitempty"`
-	Institution string             `json:"institution,omitempty"`
-	Status      bool               `json:"status,omitempty"`
-	Skill		int64			   `json:"skill,omitempty"`
+	ID              primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
+	Email           string             `json:"email" binding:"required"`
+	Username        string             `json:"username,omitempty"`
+	Name            string             `json:"name,omitempty"`
+	Solved          Solved             `json:"solved,omitempty"`
+	Institution     string             `json:"institution,omitempty"`
+	Status          bool               `json:"status,omitempty"`
+	LeetcodeUsername string             `json:"leetcode_username,omitempty"`
+	SolvedQuestions []string           `json:"solved_questions,omitempty"`
 }
 
 type Solved struct {
@@ -38,11 +39,13 @@ type Solved struct {
 	Medium int `json:"medium,omitempty"`
 	Hard   int `json:"hard,omitempty"`
 }
+
 // Graph QL 
 type GraphQLRequest struct {
 	Query     string                 `json:"query"`
 	Variables map[string]interface{} `json:"variables"`
 }
+
 
 type QuestionListResponse struct {
 	Data struct {
@@ -68,6 +71,91 @@ type QuestionListResponse struct {
 			} `json:"questions"`
 		} `json:"problemsetQuestionList"`
 	} `json:"data"`
+}
+
+func renameUsernameInFlaskAPI(oldName, newName string) error {
+	url := "https://leepath-model.el.r.appspot.com/rename" // Replace with actual Flask API URL
+	payload := map[string]string{"old_name": oldName, "new_name": newName}
+	payloadBytes, err := json.Marshal(payload)
+	if err != nil {
+		return fmt.Errorf("failed to serialize payload: %v", err)
+	}
+
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(payloadBytes))
+	if err != nil {
+		return fmt.Errorf("error calling Flask API: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := ioutil.ReadAll(resp.Body)
+		return fmt.Errorf("Flask API error: %s", string(body))
+	}
+
+	return nil
+}
+
+func getSolvedQuestionsByEmail(c *gin.Context) {
+	var req struct {
+		Email string `json:"email" binding:"required"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil || !isValidEmail(req.Email) {
+		c.JSON(http.StatusBadRequest, gin.H{"status": false, "message": "Invalid email"})
+		return
+	}
+
+	var user User
+	err := db.Collection("user").FindOne(context.Background(), bson.M{"email": req.Email}).Decode(&user)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"status": false, "message": "User not found"})
+		return
+	}
+
+	if len(user.SolvedQuestions) == 0 {
+		user.SolvedQuestions = []string{"two-sum"} // Default value
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": true, "solved_questions": user.SolvedQuestions})
+}
+
+func addSolvedQuestion(c *gin.Context) {
+	var req struct {
+		Email           string `json:"email" binding:"required"`
+		QuestionSlug    string `json:"question_slug" binding:"required"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil || !isValidEmail(req.Email) {
+		c.JSON(http.StatusBadRequest, gin.H{"status": false, "message": "Invalid email or question slug"})
+		return
+	}
+
+	var user User
+	err := db.Collection("user").FindOne(context.Background(), bson.M{"email": req.Email}).Decode(&user)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"status": false, "message": "User not found"})
+		return
+	}
+
+	// Add question to the SolvedQuestions list if not already present
+	for _, q := range user.SolvedQuestions {
+		if q == req.QuestionSlug {
+			c.JSON(http.StatusConflict, gin.H{"status": false, "message": "Question already solved"})
+			return
+		}
+	}
+	user.SolvedQuestions = append(user.SolvedQuestions, req.QuestionSlug)
+
+	// Update the user in the database
+	_, err = db.Collection("user").UpdateOne(
+		context.Background(),
+		bson.M{"email": req.Email},
+		bson.M{"$set": bson.M{"solved_questions": user.SolvedQuestions}},
+	)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Failed to update solved questions"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": true, "message": "Question added to solved list"})
 }
 
 func fetchQuestions(c *gin.Context) {
@@ -329,10 +417,6 @@ func addUser(c *gin.Context) {
 		}
 	}
 
-	if user.Skill == 0 {
-		user.Skill = 1
-	}
-
 	// Insert the user into the database
 	result, err := db.Collection("user").InsertOne(context.Background(), user)
 	if err != nil {
@@ -367,6 +451,13 @@ func updateUser(c *gin.Context) {
 			c.JSON(http.StatusConflict, gin.H{"status": false, "message": "Username already exists"})
 			return
 		}
+
+		// Call Flask API to rename username
+		err = renameUsernameInFlaskAPI(existingUser.Username, newUsername)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": fmt.Sprintf("Error renaming username: %v", err)})
+			return
+		}
 	}
 
 	update := bson.M{"$set": updateData}
@@ -384,34 +475,6 @@ func updateUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": true, "message": "User data updated"})
-}
-
-func getAllEmailsAndSkills(c *gin.Context) {
-	cursor, err := db.Collection("user").Find(context.Background(), bson.M{})
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Error fetching users from database"})
-		return
-	}
-	defer cursor.Close(context.Background())
-
-	emailSkillMap := make(map[string]int64)
-
-	for cursor.Next(context.Background()) {
-		var user User
-		if err := cursor.Decode(&user); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Error decoding user data"})
-			return
-		}
-
-		emailSkillMap[user.Email] = user.Skill
-	}
-
-	if err := cursor.Err(); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Cursor error"})
-		return
-	}
-
-	c.JSON(http.StatusOK, emailSkillMap)
 }
 
 func corsMiddleware() gin.HandlerFunc {
@@ -437,12 +500,13 @@ func main() {
 	router := gin.Default()
 	router.Use(corsMiddleware())
 	router.PATCH("/updateUser", updateUser)
+	router.POST("/getSolvedQuestions", getSolvedQuestionsByEmail)
+	router.POST("/addSolvedQuestion", addSolvedQuestion)
 	router.POST("/getUserData", getUserData)
 	router.POST("/addUser", addUser)
 	router.POST("/problemSet", fetchQuestions)
 	router.POST("/problemData", getProblemData)
 	router.POST("/getStats", getStats)
-	router.GET("/emails-skills", getAllEmailsAndSkills)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
