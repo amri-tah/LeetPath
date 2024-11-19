@@ -5,12 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -18,20 +12,27 @@ import (
 	"regexp"
 	"strconv"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var db *mongo.Database
 
 type User struct {
-	ID              primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
-	Email           string             `json:"email" binding:"required"`
-	Username        string             `json:"username,omitempty"`
-	Name            string             `json:"name,omitempty"`
-	Solved          Solved             `json:"solved,omitempty"`
-	Institution     string             `json:"institution,omitempty"`
-	Status          bool               `json:"status,omitempty"`
+	ID               primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
+	Email            string             `json:"email" binding:"required"`
+	Username         string             `json:"username,omitempty"`
+	Name             string             `json:"name,omitempty"`
+	Solved           Solved             `json:"solved,omitempty"`
+	Institution      string             `json:"institution,omitempty"`
+	Status           bool               `json:"status,omitempty"`
 	LeetcodeUsername string             `json:"leetcode_username,omitempty"`
-	SolvedQuestions []string           `json:"solved_questions,omitempty"`
+	SolvedQuestions  []string           `json:"solved_questions,omitempty"`
 }
 
 type Solved struct {
@@ -40,12 +41,11 @@ type Solved struct {
 	Hard   int `json:"hard,omitempty"`
 }
 
-// Graph QL 
+// Graph QL
 type GraphQLRequest struct {
 	Query     string                 `json:"query"`
 	Variables map[string]interface{} `json:"variables"`
 }
-
 
 type QuestionListResponse struct {
 	Data struct {
@@ -98,8 +98,8 @@ func getSolvedQuestionsByEmail(c *gin.Context) {
 
 func addSolvedQuestion(c *gin.Context) {
 	var req struct {
-		Email           string `json:"email" binding:"required"`
-		QuestionSlug    string `json:"question_slug" binding:"required"`
+		Email        string `json:"email" binding:"required"`
+		QuestionSlug string `json:"question_slug" binding:"required"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil || !isValidEmail(req.Email) {
 		c.JSON(http.StatusBadRequest, gin.H{"status": false, "message": "Invalid email or question slug"})
@@ -126,7 +126,7 @@ func addSolvedQuestion(c *gin.Context) {
 	_, err = db.Collection("user").UpdateOne(
 		context.Background(),
 		bson.M{"email": req.Email},
-		bson.M{"$set": bson.M{"solved_questions": user.SolvedQuestions}},
+		bson.M{"$set": bson.M{"solvedquestions": user.SolvedQuestions}},
 	)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Failed to update solved questions"})
@@ -228,7 +228,6 @@ func fetchQuestions(c *gin.Context) {
 	c.JSON(http.StatusOK, response.Data.ProblemsetQuestionList)
 }
 
-
 func getProblemData(c *gin.Context) {
 	var request struct {
 		TitleSlug string `json:"titleSlug" binding:"required"`
@@ -320,7 +319,6 @@ func getProblemData(c *gin.Context) {
 		"hints":            question.Hints,
 	})
 }
-
 
 func initDatabase() (*mongo.Database, error) {
 	err := godotenv.Load()
@@ -463,7 +461,6 @@ func updateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": true, "message": "User data updated"})
 }
 
-
 func corsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -595,7 +592,7 @@ func removeSolvedQuestion(c *gin.Context) {
 	}
 
 	filter := bson.M{"email": req.Email}
-	update := bson.M{"$pull": bson.M{"solved_questions": req.QuestionSlug}}
+	update := bson.M{"$pull": bson.M{"solvedquestions": req.QuestionSlug}}
 
 	result, err := db.Collection("user").UpdateOne(context.Background(), filter, update)
 	if err != nil {
@@ -610,7 +607,6 @@ func removeSolvedQuestion(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"status": true, "message": "Question removed from solved list"})
 }
-
 
 func getStats(c *gin.Context) {
 	var req struct {
