@@ -31,7 +31,6 @@ type User struct {
 	Solved           Solved             `json:"solved,omitempty"`
 	Institution      string             `json:"institution,omitempty"`
 	Status           bool               `json:"status,omitempty"`
-	LeetcodeUsername string             `json:"leetcode_username,omitempty"`
 	SolvedQuestions  []string           `json:"solved_questions,omitempty"`
 }
 
@@ -557,12 +556,12 @@ func updateSolvedWithLeetCode(c *gin.Context) {
 		return
 	}
 
-	if user.LeetcodeUsername == "" {
+	if user.Username == "" {
 		c.JSON(http.StatusOK, gin.H{"status": true, "message": "LeetCode username not provided, skipping update"})
 		return
 	}
 
-	solved, err := fetchLeetcodeStats(user.LeetcodeUsername)
+	solved, err := fetchLeetcodeStats(user.Username)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": fmt.Sprintf("Error fetching LeetCode stats: %v", err)})
 		return
