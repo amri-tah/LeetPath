@@ -16,11 +16,10 @@ const Navbar = () => {
   }, [auth]);
   const Navigations = [
     ["Home", "/#"], 
-    ["Problems", "/#"], 
-    ["Team", "/#"]
+    ["Problems", "/rec"], 
   ]; 
   return (
-    <div className='bg-gray-900 px-10 pt-6'>
+    <div className='bg-gray-900 px-[10%] pt-6'>
 <div className='flex px-10 py-5 text-xl justify-between text-balck bg-white rounded-xl top-5 sticky'>
       <h1 className='font-lexend'>
         <Link href='/'>{'{LeetPath}'}</Link>
