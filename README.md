@@ -3,6 +3,12 @@ LeetPath is a personalized question recommendation system designed for LeetCode 
 
 ## **Demo**
 
+## **Features 🌟**
+- 🔍 Personalized Recommendations: Suggests questions based on user activity and skills.
+- 🧠 Topic Modeling: Groups questions by related topics for better understanding.
+- 📊 Interactive Dashboard: Displays user stats and recommended questions.
+- ⚡ Real-Time Performance: Fast and efficient recommendations using graph-based algorithms.
+  
 ## **Tech Stack 🛠️**
 ![Tech Stack](https://skillicons.dev/icons?i=nextjs,tailwind,go,mongodb,flask,firebase,graphql,vercel,gcp,)
 
@@ -19,6 +25,8 @@ LeetPath is a personalized question recommendation system designed for LeetCode 
 - The frontend is hosted on **Vercel**.
 
 ## Screenshots
-### Website
-### Deployment
+![recommender page 1](https://github.com/user-attachments/assets/efeb391e-04ab-475f-8262-c375c7d3939e)
+![profile](https://github.com/user-attachments/assets/031eea4d-d9f9-4b46-887a-ab97dfa1a208)
+
+### Contributors
 
