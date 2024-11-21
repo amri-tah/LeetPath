@@ -2,6 +2,15 @@ import json
 import requests
 from collections import defaultdict
 
+"""
+API Credits : https://github.com/alfaarghya/alfa-leetcode-api
+
+Replace with https://alfa-leetcode-api.onrender.com/
+
+But it has a rate limit. It's better to clone it and run it locally to collect the data. 
+Remove the rate limiter in src/app.ts before running it locally. 
+"""
+
 API_BASE_URL = "http://localhost:3000/"
 
 def getProblemData(limit):
@@ -26,12 +35,12 @@ def getProblemData(limit):
         problemData[id]["dislikes"] = problem["dislikes"]
         problemData[id]["likability"] = (problem["likes"]/(problem["likes"]+problem["dislikes"]))*100
 
-    with open("test.json", "w+") as f:
+    with open("data.json", "w+") as f:
         f.write(json.dumps(problemData, indent=4))
     
 
 if __name__ == "__main__":
-    getProblemData(4000)
+    getProblemData(4000) # Replace with Number of Problems on Leetcode
 
 
 

@@ -38,7 +38,7 @@ const Profile = () => {
   const updateSolvedWithLeetCode = async (email) => {
     console.log("Update User Info API Called !!");
     try {
-      const response = await fetch('https://leetpath-go.onrender.com/updateSolvedWithLeetCode', {
+      const response = await fetch('http://127.0.0.1:8080/updateSolvedWithLeetCode', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const Profile = () => {
   const fetchImage = async (email) => {
     const filename = email.replace('@', '-').replace('.', '-') + '.png';
     try {
-      const response = await fetch('https://leepath-model.el.r.appspot.com/download', {
+      const response = await fetch('http://127.0.0.1:5000/download', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ const Profile = () => {
         formData.append('file', file);
         formData.append('filename', filename);
 
-        const response = await fetch('https://leepath-model.el.r.appspot.com/upload', {
+        const response = await fetch('http://127.0.0.1:5000/upload', {
           method: 'POST',
           body: formData,
         });
@@ -105,7 +105,7 @@ const Profile = () => {
     const filename = user.email.replace('@', '-').replace('.', '-') + '.png';
     setImage(null);
     try {
-      const response = await fetch('https://leepath-model.el.r.appspot.com/delete', {
+      const response = await fetch('http://127.0.0.1:5000/delete', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ const Profile = () => {
 
   const getUserData = async (email) => {
     try {
-      const response = await fetch('https://leetpath-go.onrender.com/getUserData', {
+      const response = await fetch('http://127.0.0.1:8080/getUserData', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -154,7 +154,7 @@ const Profile = () => {
   const handleEditSave = async () => {
     if (isEditing) {
       try {
-        const response = await fetch('https://leetpath-go.onrender.com/updateUser', {
+        const response = await fetch('http://127.0.0.1:8080/updateUser', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

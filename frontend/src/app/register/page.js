@@ -50,7 +50,7 @@ const Register = () => {
 
   const addUserToAPI = async (userEmail) => {
     try {
-      const response = await fetch('https://leetpath-go.onrender.com/addUser', {
+      const response = await fetch('http://127.0.0.1:8080/addUser', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
