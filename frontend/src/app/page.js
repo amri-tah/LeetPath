@@ -1,6 +1,7 @@
 'use client';
 import { FaChartLine, FaBrain, FaNetworkWired, FaCogs } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 export default function Home() {
   return (
@@ -39,10 +40,12 @@ export default function Home() {
           animate={{ opacity: 1, x: 0 }} 
           transition={{ duration: 1 }}
         >
-          <img 
-            src="/landing.png" 
-            alt="Landing Image" 
-            className="w-[100%]" 
+          <Image
+            src="/landing.png"
+            alt="Landing Image"
+            width={1200}   
+            height={800}   
+            className="w-full" 
           />
         </motion.div>
       </div>
@@ -70,7 +73,7 @@ export default function Home() {
             </div>
             <h2 className="text-2xl font-semibold mb-4">Personalized Recommendations</h2>
             <p className="text-lg">
-              LeetPath recommends LeetCode problems based on your past interactions, question similarity, and topics you're most likely to excel at, ensuring each recommendation is tailored to your current skill level.
+              LeetPath recommends LeetCode problems based on your past interactions, question similarity, and topics you&apos;re most likely to excel at, ensuring each recommendation is tailored to your current skill level.
             </p>
           </motion.div>
 
@@ -86,7 +89,7 @@ export default function Home() {
             </div>
             <h2 className="text-2xl font-semibold mb-4">Skill and Difficulty Matching</h2>
             <p className="text-lg">
-              LeetPath considers the difficulty levels of problems you’ve solved and provides recommendations that balance challenge and progression, making sure you're continuously improving.
+              LeetPath considers the difficulty levels of problems you&apos;ve solved and provides recommendations that balance challenge and progression, making sure you&apos;re continuously improving.
             </p>
           </motion.div>
         </div>
@@ -300,7 +303,7 @@ export default function Home() {
         </h2>
         <a href="/register">
           <div className="px-5 mt-2 py-3 rounded-lg text-xl bg-orange-500 text-white">
-            Let's Go!
+            Let&apos;s Go!
           </div>
         </a>
       </motion.div>
