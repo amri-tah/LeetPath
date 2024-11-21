@@ -19,7 +19,7 @@ const Rec = () => {
         if (user) {
           setUser(user);
           try {
-            const response = await fetch('https://leetpath-go.onrender.com/getSolvedQuestions', {
+            const response = await fetch('http://127.0.0.1:8080/getSolvedQuestions', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ const Rec = () => {
             const solvedQuestions = userResponseData.solved_questions || ["two-sum", "add-two-integers"];
             console.log(solvedQuestions);
 
-            const recResponse = await axios.post('https://leepath-model.el.r.appspot.com/recommend', {
+            const recResponse = await axios.post('http://127.0.0.1:5000/recommend', {
               solved_questions: solvedQuestions,
               count: 10,
             });
@@ -86,13 +86,13 @@ const Rec = () => {
 
       // If the question is solved, remove it
       if (problem.solved) {
-        response = await axios.post('https://leetpath-go.onrender.com/removeSolvedQuestion', {
+        response = await axios.post('http://127.0.0.1:8080/removeSolvedQuestion', {
           email: email,
           question_slug: problem.titleSlug,
         });
       } else {
         // Otherwise, add it
-        response = await axios.post('https://leetpath-go.onrender.com/addSolvedQuestion', {
+        response = await axios.post('http://127.0.0.1:8080/addSolvedQuestion', {
           email: email,
           question_slug: problem.titleSlug,
         });
