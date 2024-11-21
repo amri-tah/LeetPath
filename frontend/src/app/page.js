@@ -17,8 +17,8 @@ export default function Home() {
             Master LeetCode Problems, Your Way 🚀
           </h1>
           <p className="text-lg text-white mb-6 w-[50%] mx-auto">
-            Our adaptive learning platform personalizes coding challenges based on your skill level and progress, using AI-powered probabilistic models. 💡
-          </p>
+          LeetPath is a personalized recommendation system for LeetCode users that analyzes user interactions, question similarity, and topic relevance to suggest the best questions for skill improvement. 📈
+</p>
           <button className="px-6 py-3 bg-orange-500 text-white rounded hover:bg-orange-600 focus:outline-none transition">
             Get Started 🏁
           </button>
