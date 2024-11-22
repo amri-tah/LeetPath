@@ -15,7 +15,7 @@ https://github.com/user-attachments/assets/c13063e2-c943-4b51-b664-545248d37f06
 
 ## **Tech Stack 🛠️**
 
-![Tech Stack](https://skillicons.dev/icons?i=nextjs,tailwind,go,mongodb,flask,firebase,graphql,vercel,gcp,)
+![Tech_Stack](https://github.com/user-attachments/assets/683a321e-0ac2-4c12-9203-372a4e0cc072)
 
 - **Frontend**: Next.js with Tailwind CSS for a responsive and interactive UI.
 - **Backend**: **Flask** for API endpoints for the model and Go for fetching user data.
@@ -36,7 +36,7 @@ https://github.com/user-attachments/assets/c13063e2-c943-4b51-b664-545248d37f06
 - Belief Propagation: Used to refine potential values in the MRF and improve recommendation accuracy.
 
 ## Screenshots
-![landing](https://github.com/user-attachments/assets/4f15700a-7032-4ce2-bd59-c159005c5271)
+![landing](https://github.com/user-attachments/assets/cdf67be0-96aa-47d0-92a7-48512f315dad)
 ![Screenshot 2024-11-21 215125](https://github.com/user-attachments/assets/e8f932e7-d618-4645-9a2a-834f0612d981)
 ![Screenshot 2024-11-21 215155](https://github.com/user-attachments/assets/a9fad515-edb5-47b9-aeb5-a361f3770853)
 ![recommender page 1](https://github.com/user-attachments/assets/efeb391e-04ab-475f-8262-c375c7d3939e)
