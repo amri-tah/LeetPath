@@ -48,8 +48,8 @@ const Rec = () => {
           </p>
           <div className="mt-5 bg-yellow-500 text-black py-3 px-5 rounded-lg shadow-lg">
             <p className="text-lg font-semibold">
-              📝 <strong>Note:</strong> This is just a sample UI. Please <a href='login'>Login</a> to view the actual recommender.
-            </p>
+            📝 <strong>Note:</strong> This is just a sample UI. Please go to our <a target="_blank" href="https://github.com/amri-tah/LeetPath/tree/main"><u>Github Repo </u></a> to deploy the model by yourself. Cloud Services cost a lot man!!! 😭🙏
+              </p>
           </div>
         </div>
         <ul className="space-y-4">
