@@ -62,7 +62,7 @@ export default function Home() {
       }}
     >
       <video
-        src="/leetpathdemo.mov" // Path to the video in the public folder
+        src="/leetpathdemo.mp4" // Path to the video in the public folder
         autoPlay // Automatically plays the video
         loop // Loops the video
         muted // Mutes the video by default
