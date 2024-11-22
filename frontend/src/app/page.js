@@ -49,9 +49,32 @@ export default function Home() {
           />
         </motion.div>
       </div>
-
+      <section
+      className='rounded-xl'
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '80vh',
+        margin: '5% 0%',
+        overflow: 'hidden',
+        
+      }}
+    >
+      <video
+        src="/leetpathdemo.mov" // Path to the video in the public folder
+        autoPlay // Automatically plays the video
+        loop // Loops the video
+        muted // Mutes the video by default
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover', // Ensures the video covers the entire screen
+        }}
+      />
+    </section>
       <motion.div 
-        className="bg-gray-900 text-white px-[5%] py-20"
+        className="bg-gray-900 text-white"
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         transition={{ duration: 1 }}
@@ -141,8 +164,10 @@ export default function Home() {
         <h1 className="text-[2rem] font-semibold leading-[100%] my-5">
           How It Works ✨
         </h1>
-
+        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          
+
           <motion.div 
             className="bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center"
             whileInView={{ opacity: 1, y: 0 }}
@@ -287,6 +312,10 @@ export default function Home() {
           </motion.div>
         </div>
       </motion.div>
+
+      
+      
+
       <motion.div 
         className="flex flex-col items-center py-16" 
         initial={{ opacity: 0 }} 

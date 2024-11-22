@@ -169,7 +169,7 @@ const Rec = () => {
                     {problem.topics.map((topic, index) => (
                       <span
                         key={index}
-                        className="px-3 py-1 rounded border border-black bg-white text-black"
+                        className="px-3 py-1 text-sm rounded border border-black bg-white text-black"
                       >
                         {topic}
                       </span>

@@ -18,7 +18,7 @@ const Navbar = () => {
 
   const Navigations = [
     ["Home", "/#"],
-    ["Problems", "/rec"],
+    ["Problems", user? "/rec": "/temp"],
     ["Github", "https://github.com/amri-tah/LeetPath"]
   ];
 
