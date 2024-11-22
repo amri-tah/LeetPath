@@ -49,6 +49,7 @@ export default function Home() {
           />
         </motion.div>
       </div>
+
       <section
       className='rounded-xl'
       style={{
@@ -73,8 +74,9 @@ export default function Home() {
         }}
       />
     </section>
+
       <motion.div 
-        className="bg-gray-900 text-white"
+        className="bg-gray-900 text-white px-[5%] py-20"
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         transition={{ duration: 1 }}
@@ -164,10 +166,8 @@ export default function Home() {
         <h1 className="text-[2rem] font-semibold leading-[100%] my-5">
           How It Works ✨
         </h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          
 
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <motion.div 
             className="bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center"
             whileInView={{ opacity: 1, y: 0 }}
@@ -312,10 +312,6 @@ export default function Home() {
           </motion.div>
         </div>
       </motion.div>
-
-      
-      
-
       <motion.div 
         className="flex flex-col items-center py-16" 
         initial={{ opacity: 0 }} 
