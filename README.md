@@ -1,15 +1,17 @@
 # **LeetPath: A Graph-Based LeetCode Question Recommender 🧭🔍**
 
-LeetPath is a personalized question recommendation system designed for LeetCode users. Using graph-based structures and probabilistic reasoning, the system analyzes user interaction, question similarity, and topic relevance to suggest the most appropriate questions for continued skill improvement. 📈
+LeetPath is a personalized question recommendation system designed for LeetCode users. Using graph-based structures, topic modeling, and Markov Random Field, the system analyzes user interaction, question similarity, and topic relevance to suggest the most appropriate questions for continued skill improvement. 📈
 
-## **Demo**
+## **Demo 🎥**
+
+https://github.com/user-attachments/assets/c13063e2-c943-4b51-b664-545248d37f06
 
 ## **Features 🌟**
 
 - 🔍 Personalized Recommendations: Suggests questions based on user activity and skills.
 - 🧠 Topic Modeling: Groups questions by related topics for better understanding.
 - 📊 Interactive Dashboard: Displays user stats and recommended questions.
-- ⚡ Real-Time Performance: Fast and efficient recommendations using graph-based algorithms.
+- ⚡ Real-Time Performance: Fast and efficient recommendations using graph-based algorithms and belief propagation.
 
 ## **Tech Stack 🛠️**
 
@@ -19,7 +21,6 @@ LeetPath is a personalized question recommendation system designed for LeetCode 
 - **Backend**: **Flask** for API endpoints for the model and Go for fetching user data.
 - **Database**: **MongoDB** for storing user data.
 - **Authentication**: **Firebase** for secure user login and management.
-- **Hosting**: Model Deployed on **Google Cloud Platform** using App Engine, and backend deployed on **OnRender**.
 - **GraphQL**: For efficient and flexible data querying.
 
 ## **Deployment and Hosting 💻**
@@ -28,8 +29,16 @@ LeetPath is a personalized question recommendation system designed for LeetCode 
 - The backend code is deployed on **OnRender**.
 - The frontend is hosted on **Vercel**.
 
-## Screenshots
+## **How It Works** 📊
+- Question Similarity: Content-based filtering using TF-IDF and cosine similarity to recommend questions based on their content similarity.
+- Topic Modeling: Grouping questions by latent topics using a custom topic modeling algorithm (similar to Latent Dirichlet Allocation).
+- Markov Random Field (MRF): Models relationships between questions, accounting for user engagement, difficulty, and question similarities.
+- Belief Propagation: Used to refine potential values in the MRF and improve recommendation accuracy.
 
+## Screenshots
+![landing](https://github.com/user-attachments/assets/4f15700a-7032-4ce2-bd59-c159005c5271)
+![Screenshot 2024-11-21 215125](https://github.com/user-attachments/assets/e8f932e7-d618-4645-9a2a-834f0612d981)
+![Screenshot 2024-11-21 215155](https://github.com/user-attachments/assets/a9fad515-edb5-47b9-aeb5-a361f3770853)
 ![recommender page 1](https://github.com/user-attachments/assets/efeb391e-04ab-475f-8262-c375c7d3939e)
 ![profile](https://github.com/user-attachments/assets/031eea4d-d9f9-4b46-887a-ab97dfa1a208)
 
@@ -56,3 +65,15 @@ LeetPath is a personalized question recommendation system designed for LeetCode 
 	<td><b style="display:block; margin:auto;">Giri Prasath R</b></td>
     </tr>
 </table>
+
+
+## Contributing 🌟
+We welcome contributions to enhance the functionality of LeetPath! If you have ideas or improvements, please submit a pull request . 🚀
+
+## License 📜
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details . 📄
+
+## Contact 📧
+For any queries or support, please contact us at [amrithanandini2003@gmail.com](mailto:amrithanandini2003@gmail.com) or [vishalatmadurai@gmail.com](mailto:vishalatmadurai@gmail.com). We're here to help you!📬
+
+Thank you for using LeetPath! Let's elevate your LeetCode experience together. 🚀💻
