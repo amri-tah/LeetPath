@@ -1,4 +1,5 @@
 # **LeetPath: A Graph-Based LeetCode Question Recommender 🧭🔍**
+![image](https://github.com/user-attachments/assets/de27890f-cf7e-42fa-9582-b3e0f4d5bc7b)
 
 LeetPath is a personalized question recommendation system designed for LeetCode users. Using graph-based structures, topic modeling, and Markov Random Field, the system analyzes user interaction, question similarity, and topic relevance to suggest the most appropriate questions for continued skill improvement. 📈
 
