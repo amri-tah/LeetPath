@@ -5,37 +5,36 @@ import Image from 'next/image';
 
 export default function Home() {
   return (
-    <div className="bg-gray-900 text-white px-[10%]">
-      <div className="flex items-center">
+    <div className="bg-gray-900 text-white px-[5%] md:px-[10%]">
+      <div className="flex flex-col lg:flex-row items-center">
         <motion.div 
-          className="w-[50%]"
+          className="w-full lg:w-[50%]"
           initial={{ opacity: 0, x: -50 }} 
           animate={{ opacity: 1, x: 0 }} 
           transition={{ duration: 1 }}
         >
-          <h1 className="text-[4rem] font-semibold leading-[100%]">
+          <h1 className="text-[3rem] sm:text-[4rem] font-semibold leading-tight">
             Master LeetCode Problems, Your Way 🚀
           </h1>
-          <h2 className="text-xl mt-2">
+          <h2 className="text-lg sm:text-xl mt-2">
             LeetPath is a personalized recommendation system for LeetCode users that analyzes user interactions, question similarity, and topic relevance to suggest the best questions for skill improvement. 📈
           </h2>
           <div className="flex gap-3 mt-5">
             <a href="#learnmore">
-              <div className="px-5 py-3 rounded-lg text-xl bg-white text-black">
+              <div className="px-5 py-3 rounded-lg text-xl bg-white text-black hover:bg-gray-300 transition">
                 Learn More
               </div>
             </a>
             <a href="/register">
-              <div className="px-5 py-3 rounded-lg text-xl bg-orange-500 text-white">
+              <div className="px-5 py-3 rounded-lg text-xl bg-orange-500 text-white hover:bg-orange-400 transition">
                 Get Started
               </div>
             </a>
           </div>
         </motion.div>
 
-        
         <motion.div 
-          className="w-[50%]" 
+          className="w-full lg:w-[50%]" 
           initial={{ opacity: 0, x: 50 }} 
           animate={{ opacity: 1, x: 0 }} 
           transition={{ duration: 1 }}
@@ -45,35 +44,34 @@ export default function Home() {
             alt="Landing Image"
             width={1200}   
             height={800}   
-            className="w-full" 
+            className="w-full h-auto" 
           />
         </motion.div>
       </div>
 
       <section
-      className='rounded-xl'
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '80vh',
-        margin: '5% 0%',
-        overflow: 'hidden',
-        
-      }}
-    >
-      <video
-        src="/leetpathdemo.mp4" // Path to the video in the public folder
-        autoPlay // Automatically plays the video
-        loop // Loops the video
-        muted // Mutes the video by default
+        className="rounded-xl"
         style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover', // Ensures the video covers the entire screen
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '50vh',
+          margin: '5% 0%',
+          overflow: 'hidden',
         }}
-      />
-    </section>
+      >
+        <video
+          src="/leetpathdemo.mp4"
+          autoPlay
+          loop
+          muted
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+      </section>
 
       <motion.div 
         className="bg-gray-900 text-white px-[5%] py-20"
@@ -81,253 +79,112 @@ export default function Home() {
         animate={{ opacity: 1 }} 
         transition={{ duration: 1 }}
       >
-        <h1 id="learnmore" className="text-[3rem] font-semibold text-center mb-4">
-          
+        <h1 id="learnmore" className="text-[2rem] sm:text-[3rem] font-semibold text-center mb-4">
+          Features
         </h1>
 
-        <div className="flex flex-col lg:flex-row justify-between gap-12">
-          {/* Feature 1 */}
-          <motion.div 
-            className="bg-gray-800 p-10 rounded-3xl shadow-xl transform hover:scale-105 transition duration-500 ease-in-out w-full lg:w-[45%]"
-            initial={{ opacity: 0, x: -100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1 }}
-          >
-            <div className="bg-orange-500 px-8 py-4 rounded-full mb-6">
-              <FaChartLine className="text-white text-4xl" />
-            </div>
-            <h2 className="text-2xl font-semibold mb-4">Personalized Recommendations</h2>
-            <p className="text-lg">
-              LeetPath recommends LeetCode problems based on your past interactions, question similarity, and topics you&apos;re most likely to excel at, ensuring each recommendation is tailored to your current skill level.
-            </p>
-          </motion.div>
-
-          {/* Feature 2 */}
-          <motion.div 
-            className="bg-gray-800 p-10 rounded-3xl shadow-xl transform hover:scale-105 transition duration-500 ease-in-out w-full lg:w-[45%]"
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1 }}
-          >
-            <div className="bg-orange-500  px-8 py-4 rounded-full mb-6">
-              <FaBrain className="text-white text-4xl" />
-            </div>
-            <h2 className="text-2xl font-semibold mb-4">Skill and Difficulty Matching</h2>
-            <p className="text-lg">
-              LeetPath considers the difficulty levels of problems you&apos;ve solved and provides recommendations that balance challenge and progression, making sure you&apos;re continuously improving.
-            </p>
-          </motion.div>
-        </div>
-
-        <div className="mt-16 flex flex-col lg:flex-row justify-between gap-12">
-          {/* Feature 3 */}
-          <motion.div 
-            className="bg-gray-800 p-10 rounded-3xl shadow-xl transform hover:scale-105 transition duration-500 ease-in-out w-full lg:w-[45%]"
-            initial={{ opacity: 0, y: 100 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-          >
-            <div className="bg-orange-500  px-8 py-4 rounded-full mb-6">
-              <FaNetworkWired className="text-white text-4xl" />
-            </div>
-            <h2 className="text-2xl font-semibold mb-4">Continuous Learning</h2>
-            <p className="text-lg">
-              As you solve more problems, the system continuously learns and adapts, ensuring the recommendations always reflect your evolving skill level and learning trajectory.
-            </p>
-          </motion.div>
-
-          {/* Feature 4 */}
-          <motion.div 
-            className="bg-gray-800 p-10 rounded-3xl shadow-xl transform hover:scale-105 transition duration-500 ease-in-out w-full lg:w-[45%]"
-            initial={{ opacity: 0, y: 100 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-          >
-            <div className="bg-orange-500  px-8 py-4 rounded-full mb-6">
-              <FaCogs className="text-white text-4xl" />
-            </div>
-            <h2 className="text-2xl font-semibold mb-4">Graph-Based Approach</h2>
-            <p className="text-lg">
-              A graph-based recommendation engine builds connections between problems based on content similarity and topic overlap. This results in dynamic, interrelated recommendations that improve over time.
-            </p>
-          </motion.div>
+        <div className="flex flex-col lg:flex-row justify-between gap-8">
+          {['Personalized Recommendations', 'Skill and Difficulty Matching', 'Continuous Learning', 'Graph-Based Approach'].map((title, index) => (
+            <motion.div 
+              key={index}
+              className="bg-gray-800 p-10 rounded-3xl shadow-xl transform hover:scale-105 transition duration-500 ease-in-out w-full lg:w-[45%]"
+              initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1 }}
+            >
+              <div className="bg-orange-500 px-8 py-4 rounded-full mb-6">
+                {index === 0 && <FaChartLine className="text-white text-4xl" />}
+                {index === 1 && <FaBrain className="text-white text-4xl" />}
+                {index === 2 && <FaNetworkWired className="text-white text-4xl" />}
+                {index === 3 && <FaCogs className="text-white text-4xl" />}
+              </div>
+              <h2 className="text-2xl font-semibold mb-4">{title}</h2>
+              <p className="text-lg">
+                {index === 0 && "LeetPath recommends LeetCode problems based on your past interactions, ensuring each recommendation is tailored to your current skill level."}
+                {index === 1 && "LeetPath considers the difficulty levels of problems you&apos;ve solved, providing a balance of challenge and progression."}
+                {index === 2 && "As you solve more problems, the system adapts and ensures the recommendations always reflect your evolving skills."}
+                {index === 3 && "A graph-based recommendation engine connects questions dynamically, improving recommendations over time."}
+              </p>
+            </motion.div>
+          ))}
         </div>
       </motion.div>
 
-      {/* How It Works Section */}
       <motion.div
-        className="flex flex-col items-center py-10" 
+        className="flex flex-col items-center py-10"
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         transition={{ duration: 1, delay: 0.5 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
       >
-        <h1 className="text-[2rem] font-semibold leading-[100%] my-5">
+        <h1 className="text-[2rem] sm:text-[3rem] font-semibold my-5">
           How It Works ✨
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          <motion.div 
-            className="bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center"
-            whileInView={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 50 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true }}
-          >
-            <div className="bg-orange-500 p-4 rounded-full mb-4">
-              <FaCogs className="text-white text-3xl" />
-            </div>
-            <h2 className="text-xl font-semibold">Graph-Based Engine</h2>
-            <p className="text-center mt-2">
-              A graph structure models questions as nodes, with relationships like content similarity and topic overlap as edges. This allows for smarter recommendations based on related questions.
-            </p>
-          </motion.div>
-          <motion.div 
-            className="bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center"
-            whileInView={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 50 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true }}
-          >
-            <div className="bg-orange-500 p-4 rounded-full mb-4">
-              <FaBrain className="text-white text-3xl" />
-            </div>
-            <h2 className="text-xl font-semibold">Topic Modeling</h2>
-            <p className="text-center mt-2">
-              Latent topics within questions are identified, helping to improve recommendation relevance by matching questions to your specific skill gaps.
-            </p>
-          </motion.div>
-          <motion.div 
-            className="bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center"
-            whileInView={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 50 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true }}
-          >
-            <div className="bg-orange-500 p-4 rounded-full mb-4">
-              <FaNetworkWired className="text-white text-3xl" />
-            </div>
-            <h2 className="text-xl font-semibold">MRF Belief Propagation</h2>
-            <p className="text-center mt-2">
-              A Markov Random Field (MRF) is used for belief propagation, refining recommendations through joint probabilities to ensure they match your skill level and learning preferences.
-            </p>
-          </motion.div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+          {['Graph-Based Engine', 'Topic Modeling', 'MRF Belief Propagation'].map((title, index) => (
+            <motion.div 
+              key={index}
+              className="bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center"
+              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 50 }}
+              transition={{ duration: 1 }}
+              viewport={{ once: true }}
+            >
+              <div className="bg-orange-500 p-4 rounded-full mb-4">
+                {index === 0 && <FaCogs className="text-white text-3xl" />}
+                {index === 1 && <FaBrain className="text-white text-3xl" />}
+                {index === 2 && <FaNetworkWired className="text-white text-3xl" />}
+              </div>
+              <h2 className="text-xl font-semibold">{title}</h2>
+              <p className="text-center mt-2">
+                {index === 0 && "Questions are modeled as nodes in a graph structure, with relationships between them reflecting content similarity."}
+                {index === 1 && "We identify latent topics to match questions to your specific skill gaps for improved relevance."}
+                {index === 2 && "We use belief propagation in Markov Random Fields to refine recommendations based on probabilities."}
+              </p>
+            </motion.div>
+          ))}
         </div>
       </motion.div>
 
-      {/* Tech Stack Section */}
       <motion.div 
-        className="flex flex-col items-center p-10 my-16" 
+        className="flex flex-col items-center p-10 my-16"
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         transition={{ duration: 1, delay: 0.5 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
       >
-        <h1 className="text-[2rem] font-semibold leading-[100%] mb-4">
+        <h1 className="text-[2rem] sm:text-[3rem] font-semibold leading-[100%] mb-4">
           Our Tech Stack 💻
         </h1>
         <div className="flex flex-wrap justify-center gap-6">
-          <motion.div 
-            whileInView={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 50 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center justify-center"
-          >
-            <img src="https://skillicons.dev/icons?i=nextjs" alt="Next.js" className="h-20" />
-          </motion.div>
-          <motion.div 
-            whileInView={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 50 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center justify-center"
-          >
-            <img src="https://skillicons.dev/icons?i=tailwind" alt="Tailwind CSS" className="h-20" />
-          </motion.div>
-          <motion.div 
-            whileInView={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 50 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center justify-center"
-          >
-            <img src="https://skillicons.dev/icons?i=go" alt="Go" className="h-20" />
-          </motion.div>
-          <motion.div 
-            whileInView={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 50 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center justify-center"
-          >
-            <img src="https://skillicons.dev/icons?i=mongodb" alt="MongoDB" className="h-20" />
-          </motion.div>
-          <motion.div 
-            whileInView={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 50 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center justify-center"
-          >
-            <img src="https://skillicons.dev/icons?i=flask" alt="Flask" className="h-20" />
-          </motion.div>
-          <motion.div 
-            whileInView={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 50 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center justify-center"
-          >
-            <img src="https://skillicons.dev/icons?i=firebase" alt="Firebase" className="h-20" />
-          </motion.div>
-          <motion.div 
-            whileInView={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 50 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center justify-center"
-          >
-            <img src="https://skillicons.dev/icons?i=graphql" alt="GraphQL" className="h-20" />
-          </motion.div>
-          <motion.div 
-            whileInView={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 50 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center justify-center"
-          >
-            <img src="https://skillicons.dev/icons?i=vercel" alt="Vercel" className="h-20" />
-          </motion.div>
-          <motion.div 
-            whileInView={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 50 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center justify-center"
-          >
-            <img src="https://skillicons.dev/icons?i=gcp" alt="GCP" className="h-20 " />
-          </motion.div>
+          {['nextjs', 'tailwind', 'go', 'mongodb', 'flask', 'firebase', 'graphql', 'vercel', 'gcp'].map((tech, index) => (
+            <motion.div
+              key={index}
+              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 50 }}
+              transition={{ duration: 1 }}
+              viewport={{ once: true }}
+              className="flex items-center justify-center"
+            >
+              <img src={`https://skillicons.dev/icons?i=${tech}`} alt={tech} className="h-20" />
+            </motion.div>
+          ))}
         </div>
       </motion.div>
+
       <motion.div 
         className="flex flex-col items-center py-16" 
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         transition={{ duration: 1, delay: 0.5 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
       >
-        <h1 className="text-[2rem] font-semibold leading-[100%]">
+        <h1 className="text-[2rem] sm:text-[3rem] font-semibold leading-[100%]">
           Ready to Level Up Your LeetCode Game? 🎮
         </h1>
-        <h2 className="text-lg w-[50%] text-center">
+        <h2 className="text-lg sm:text-xl w-[80%] sm:w-[50%] text-center">
           Sign up now to receive personalized question recommendations based on your unique LeetCode journey. Get started with smarter practice today!
         </h2>
         <a href="/register">
-          <div className="px-5 mt-2 py-3 rounded-lg text-xl bg-orange-500 text-white">
+          <div className="px-6 py-3 mt-6 rounded-lg text-xl bg-orange-500 text-white hover:bg-orange-400 transition">
             Let&apos;s Go!
           </div>
         </a>
