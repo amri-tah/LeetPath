@@ -1,8 +1,9 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import app from "../../../config.js"; // Ensure this path is correct for your setup
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'; 
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider, OAuthProvider } from 'firebase/auth'; 
 import { useRouter } from 'next/navigation';
+import { FaGoogle, FaGithub, FaFacebook, FaMicrosoft } from 'react-icons/fa';
 
 const Login = () => { 
   const [email, setEmail] = useState('');
@@ -20,14 +21,17 @@ const Login = () => {
     return () => unsub();
   }, [router]);
 
-  const handleGoogleSignIn = async () => {
+  const handleSocialSignIn = async (provider) => {
     const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
       router.push("/profile");
     } catch (error) {
-      setError("Error signing in with Google: " + error.message);
+      if(error.code==="auth/account-exists-with-different-credential"){
+        setError("Account exists with a different credential. Please log in with that credential.");
+      }else{
+        setError("Error signing in: " + error.message);
+      }
     }
   };
 
@@ -81,13 +85,29 @@ const Login = () => {
 
         <p className='text-center my-4'>OR</p>
 
-        {/* Google Sign-In Button */}
-        <button
-          onClick={handleGoogleSignIn}
-          className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl w-full transition duration-300'>
-          Sign In with Google
-        </button>
-
+        {/* Social Sign-In Buttons */}
+        <div className="flex justify-center space-x-2">
+          <button
+            onClick={() => handleSocialSignIn(new GoogleAuthProvider())}
+            className='flex items-center justify-center bg-red-500 hover:bg-red-700 text-white font-bold w-12 h-12 rounded-lg transition duration-300'>
+            <FaGoogle className='text-lg' />
+          </button>
+          <button
+            onClick={() => handleSocialSignIn(new FacebookAuthProvider())}
+            className='flex items-center justify-center bg-blue-600 hover:bg-blue-800 text-white font-bold w-12 h-12 rounded-lg transition duration-300'>
+            <FaFacebook className='text-lg' />
+          </button>
+          <button
+            onClick={() => handleSocialSignIn(new GithubAuthProvider())}
+            className='flex items-center justify-center bg-gray-800 hover:bg-gray-900 text-white font-bold w-12 h-12 rounded-lg transition duration-300'>
+            <FaGithub className='text-lg' />
+          </button>
+          <button
+            onClick={() => handleSocialSignIn(new OAuthProvider('microsoft.com'))}
+            className='flex items-center justify-center bg-blue-500 hover:bg-blue-700 text-white font-bold w-12 h-12 rounded-lg transition duration-300'>
+            <FaMicrosoft className='text-lg' />
+          </button>
+        </div>
         <p className='text-center mt-4'>
           Don’t have an account?
           <button
