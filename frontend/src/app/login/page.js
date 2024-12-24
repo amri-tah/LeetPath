@@ -27,7 +27,11 @@ const Login = () => {
       await signInWithPopup(auth, provider);
       router.push("/profile");
     } catch (error) {
-      setError("Error signing in: " + error.message);
+      if(error.code==="auth/account-exists-with-different-credential"){
+        setError("Account exists with a different credential. Please log in with that credential.");
+      }else{
+        setError("Error signing in: " + error.message);
+      }
     }
   };
 
