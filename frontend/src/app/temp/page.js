@@ -108,7 +108,7 @@ const Rec = () => {
                     href={`${problem.link}`}
                     className="flex items-center ml-auto"
                   >
-                    <FaArrowRight className="w-10 h-10 text-blue-500 -rotate-45" />
+                    <FaArrowRight className="text-blue-500 transform -rotate-45 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-8 lg:h-8" />
                   </a>
                 </div>
               </div>
