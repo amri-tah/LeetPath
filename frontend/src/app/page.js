@@ -6,14 +6,15 @@ import Image from 'next/image';
 export default function Home() {
   return (
     <div className="bg-gray-900 text-white px-[5%] md:px-[10%]">
-      <div className="flex flex-col lg:flex-row items-center">
+      {/* Hero Section */}
+      <div className="flex flex-col lg:flex-row items-center sm:mb-10">
         <motion.div 
           className="w-full lg:w-[50%]"
           initial={{ opacity: 0, x: -50 }} 
           animate={{ opacity: 1, x: 0 }} 
           transition={{ duration: 1 }}
         >
-          <h1 className="text-[3rem] sm:text-[4rem] font-semibold leading-tight">
+          <h1 className="text-[3rem] sm:text-[4rem] font-semibold leading-tight pt-4">
             Master LeetCode Problems, Your Way 🚀
           </h1>
           <h2 className="text-lg sm:text-xl mt-2">
@@ -32,7 +33,6 @@ export default function Home() {
             </a>
           </div>
         </motion.div>
-
         <motion.div 
           className="w-full lg:w-[50%]" 
           initial={{ opacity: 0, x: 50 }} 
@@ -42,15 +42,16 @@ export default function Home() {
           <Image
             src="/landing.png"
             alt="Landing Image"
-            width={1200}   
-            height={800}   
-            className="w-full h-auto" 
+            width={1200}
+            height={800}
+            className="w-full h-auto"
           />
         </motion.div>
       </div>
 
+      {/* Video Section */}
       <section
-        className="rounded-xl"
+        className="rounded-xl sm:mb-10"
         style={{
           display: 'flex',
           justifyContent: 'center',
@@ -73,21 +74,21 @@ export default function Home() {
         />
       </section>
 
+      {/* Features Section */}
       <motion.div 
-        className="bg-gray-900 text-white px-[5%] py-20"
+        className="bg-gray-900 text-white px-[5%] py-28 sm:mb-10"
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         transition={{ duration: 1 }}
       >
-        <h1 id="learnmore" className="text-[2rem] sm:text-[3rem] font-semibold text-center mb-4">
+        <h1 id="learnmore" className="text-[2.5rem] sm:text-[3.5rem] font-semibold text-center mb-6">
           Features
         </h1>
-
-        <div className="flex flex-col lg:flex-row justify-between gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-12">
           {['Personalized Recommendations', 'Skill and Difficulty Matching', 'Continuous Learning', 'Graph-Based Approach'].map((title, index) => (
             <motion.div 
               key={index}
-              className="bg-gray-800 p-10 rounded-3xl shadow-xl transform hover:scale-105 transition duration-500 ease-in-out w-full lg:w-[45%]"
+              className="bg-gray-800 p-16 rounded-3xl shadow-xl transform hover:scale-105 transition duration-500 ease-in-out w-full"
               initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1 }}
@@ -98,10 +99,10 @@ export default function Home() {
                 {index === 2 && <FaNetworkWired className="text-white text-4xl" />}
                 {index === 3 && <FaCogs className="text-white text-4xl" />}
               </div>
-              <h2 className="text-2xl font-semibold mb-4">{title}</h2>
-              <p className="text-lg">
+              <h2 className="text-3xl font-semibold mb-4">{title}</h2>
+              <p className="text-lg leading-relaxed">
                 {index === 0 && "LeetPath recommends LeetCode problems based on your past interactions, ensuring each recommendation is tailored to your current skill level."}
-                {index === 1 && "LeetPath considers the difficulty levels of problems you&apos;ve solved, providing a balance of challenge and progression."}
+                {index === 1 && "LeetPath considers the difficulty levels of problems you've solved, providing a balance of challenge and progression."}
                 {index === 2 && "As you solve more problems, the system adapts and ensures the recommendations always reflect your evolving skills."}
                 {index === 3 && "A graph-based recommendation engine connects questions dynamically, improving recommendations over time."}
               </p>
@@ -110,8 +111,9 @@ export default function Home() {
         </div>
       </motion.div>
 
+      {/* How It Works Section */}
       <motion.div
-        className="flex flex-col items-center py-10"
+        className="flex flex-col items-center py-10 sm:mb-10"
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         transition={{ duration: 1, delay: 0.5 }}
@@ -119,7 +121,6 @@ export default function Home() {
         <h1 className="text-[2rem] sm:text-[3rem] font-semibold my-5">
           How It Works ✨
         </h1>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
           {['Graph-Based Engine', 'Topic Modeling', 'MRF Belief Propagation'].map((title, index) => (
             <motion.div 
@@ -146,13 +147,14 @@ export default function Home() {
         </div>
       </motion.div>
 
+      {/* Tech Stack Section */}
       <motion.div 
-        className="flex flex-col items-center p-10 my-16"
+        className="flex flex-col items-center p-10 my-16 sm:mb-10"
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         transition={{ duration: 1, delay: 0.5 }}
       >
-        <h1 className="text-[2rem] sm:text-[3rem] font-semibold leading-[100%] mb-4">
+        <h1 className="text-[2rem] sm:text-[3rem] font-semibold leading-[100%] mb-4 pb-4">
           Our Tech Stack 💻
         </h1>
         <div className="flex flex-wrap justify-center gap-6">
@@ -171,13 +173,14 @@ export default function Home() {
         </div>
       </motion.div>
 
+      {/* Call to Action Section */}
       <motion.div 
-        className="flex flex-col items-center py-16" 
+        className="flex flex-col items-center py-16 sm:mb-10" 
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         transition={{ duration: 1, delay: 0.5 }}
       >
-        <h1 className="text-[2rem] sm:text-[3rem] font-semibold leading-[100%]">
+        <h1 className="text-[2rem] text-center sm:text-[3rem] font-semibold leading-[100%] pb-4">
           Ready to Level Up Your LeetCode Game? 🎮
         </h1>
         <h2 className="text-lg sm:text-xl w-[80%] sm:w-[50%] text-center">

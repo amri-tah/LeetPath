@@ -36,7 +36,7 @@ const Navbar = () => {
   return (
     <div className="bg-gray-900 px-6 pt-6">
       <motion.div
-        className="flex items-center justify-between px-10 py-5 text-xl text-black bg-white rounded-xl sticky top-0 z-50 shadow-lg"
+        className="flex items-center justify-between max-w-screen-2xl mx-auto px-4 py-5 text-xl text-black bg-white rounded-xl sticky top-0 z-50 shadow-lg"
         whileHover={{ scale: 1.05 }}
         transition={{ duration: 0.3 }}
       >
