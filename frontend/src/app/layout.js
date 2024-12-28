@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import "./globals.css";
 import Footer from "@/components/Footer";
+import Recommendations from "@/components/Recommendations";
 
 export const metadata = {
   title: "LeetPath",
@@ -10,11 +11,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-
-      <body className='font-montserrat'>
-        <Navbar/>
+      <body className="font-montserrat">
+        <Navbar />
+        <Recommendations />
         {children}
-        <Footer/>
+        <Footer />
       </body>
     </html>
   );
