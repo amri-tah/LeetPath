@@ -67,20 +67,20 @@ const Register = () => {
   };
 
   return (
-    <div className='bg-gray-900 flex flex-col items-center justify-center py-12 min-h-screen'>
-      <div className='bg-white p-6 sm:p-8 rounded-lg shadow-lg max-w-md w-full'>
-        <h1 className='text-2xl font-bold mb-4 text-center'>Sign Up</h1>
+    <div className='bg-gray-900 flex flex-col items-center justify-center py-16 min-h-[80vh]'>
+      <div className='bg-white p-10 sm:p-12 md:p-14 rounded-lg shadow-lg w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl transition-all duration-300'>
+        <h1 className='text-3xl font-bold mb-8 text-center text-gray-800'>Sign Up</h1>
 
-        {error && <p className='text-red-500 text-center mb-4'>{error}</p>}
+        {error && <p className='text-red-500 text-center mb-6'>{error}</p>}
 
         {/* Registration Form */}
-        <form onSubmit={handleEmailAuth} className='flex flex-col space-y-4'>
+        <form onSubmit={handleEmailAuth} className='flex flex-col space-y-6'>
           <input
             type='text'
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder='Full Name'
-            className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
+            className='px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
             required
           />
           <input
@@ -88,7 +88,7 @@ const Register = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder='Email'
-            className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
+            className='px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
             required
           />
           <input
@@ -96,7 +96,7 @@ const Register = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder='Password'
-            className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
+            className='px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
             required
           />
           <input
@@ -104,31 +104,31 @@ const Register = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder='Confirm Password'
-            className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
+            className='px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
             required
           />
 
           <button
             type='submit'
-            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl transition duration-300'>
+            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition duration-300 w-full text-lg'>
             Sign Up
           </button>
         </form>
 
-        <p className='text-center my-4 text-gray-500'>OR</p>
+        <p className='text-center my-6 text-gray-500'>OR</p>
 
         {/* Google Sign-In Button */}
         <button
           onClick={handleGoogleSignIn}
-          className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl w-full transition duration-300'>
+          className='bg-red-500 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl w-full transition duration-300 text-lg'>
           Sign Up with Google
         </button>
         
-        <p className='text-center mt-4 text-gray-500'>
-          Already have an account?
+        <p className='text-center mt-6 text-gray-600'>
+          Already have an account?{' '}
           <button
             type='button'
-            className='text-blue-500 hover:underline ml-2'
+            className='text-blue-500 hover:underline'
             onClick={() => router.push('/login')}>
             Sign In
           </button>
