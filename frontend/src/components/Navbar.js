@@ -18,10 +18,9 @@ const Navbar = () => {
   }, [auth]);
 
   const Navigations = [
-    ["Home", "/#"],
-
-    ["Problems", user ? "/rec" : "/temp"],
-    ["Github", "https://github.com/amri-tah/LeetPath"]
+    ['Home', '/#'],
+    ['Problems', user ? '/rec' : '/temp'],
+    ['Github', 'https://github.com/amri-tah/LeetPath'],
   ];
 
   const toggleMenu = () => {
@@ -34,11 +33,12 @@ const Navbar = () => {
   };
 
   return (
-    <div className="bg-gray-900 px-6 pt-6">
+    <div className="relative bg-gray-900 px-6 pt-6 overflow-hidden max-w-full">
       <motion.div
         className="flex items-center justify-between max-w-screen-2xl mx-auto px-4 py-5 text-xl text-black bg-white rounded-xl sticky top-0 z-50 shadow-lg"
-        whileHover={{ scale: 1.05 }}
+        whileHover={{ scale: 1.02 }}
         transition={{ duration: 0.3 }}
+        style={{ transformOrigin: 'center' }}
       >
         {/* Logo Section */}
         <h1 className="font-lexend text-2xl">
@@ -70,8 +70,9 @@ const Navbar = () => {
           {Navigations.map((element, index) => (
             <motion.h1
               key={index}
-              whileHover={{ color: '#f59e0b', scale: 1.1 }}
+              whileHover={{ color: '#f59e0b', scale: 1.05 }}
               transition={{ duration: 0.2 }}
+              style={{ transformOrigin: 'center' }}
               className="text-lg"
             >
               <Link href={element[1]}>{element[0]}</Link>
@@ -80,8 +81,9 @@ const Navbar = () => {
           {/* Conditionally render Register / Login based on the user state */}
           {!user && (
             <motion.h1
-              whileHover={{ color: '#f59e0b', scale: 1.1 }}
+              whileHover={{ color: '#f59e0b', scale: 1.05 }}
               transition={{ duration: 0.2 }}
+              style={{ transformOrigin: 'center' }}
               className="text-lg"
             >
               <Link href="/register">Register / Login</Link>
@@ -100,8 +102,9 @@ const Navbar = () => {
           {Navigations.map((element, index) => (
             <motion.h1
               key={index}
-              whileHover={{ color: '#f59e0b', scale: 1.1 }}
+              whileHover={{ color: '#f59e0b', scale: 1.05 }}
               transition={{ duration: 0.2 }}
+              style={{ transformOrigin: 'center' }}
               className="py-2 text-lg"
             >
               <Link href={element[1]} onClick={closeMenu}>
@@ -112,8 +115,9 @@ const Navbar = () => {
           {/* Conditionally render Register / Login in the mobile menu */}
           {!user && (
             <motion.h1
-              whileHover={{ color: '#f59e0b', scale: 1.1 }}
+              whileHover={{ color: '#f59e0b', scale: 1.05 }}
               transition={{ duration: 0.2 }}
+              style={{ transformOrigin: 'center' }}
               className="py-2 text-lg"
             >
               <Link href="/register" onClick={closeMenu}>
