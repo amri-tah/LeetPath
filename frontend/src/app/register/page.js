@@ -67,8 +67,8 @@ const Register = () => {
   };
 
   return (
-    <div className='bg-gray-900 flex flex-col items-center justify-center py-[5%]'>
-      <div className='bg-white p-8 rounded-lg shadow-lg max-w-md w-full'>
+    <div className='bg-gray-900 flex flex-col items-center justify-center py-12 min-h-screen'>
+      <div className='bg-white p-6 sm:p-8 rounded-lg shadow-lg max-w-md w-full'>
         <h1 className='text-2xl font-bold mb-4 text-center'>Sign Up</h1>
 
         {error && <p className='text-red-500 text-center mb-4'>{error}</p>}
@@ -115,7 +115,7 @@ const Register = () => {
           </button>
         </form>
 
-        <p className='text-center my-4'>OR</p>
+        <p className='text-center my-4 text-gray-500'>OR</p>
 
         {/* Google Sign-In Button */}
         <button
@@ -124,7 +124,7 @@ const Register = () => {
           Sign Up with Google
         </button>
         
-        <p className='text-center mt-4'>
+        <p className='text-center mt-4 text-gray-500'>
           Already have an account?
           <button
             type='button'
