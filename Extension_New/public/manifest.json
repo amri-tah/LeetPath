@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Leetpath",
+  "version": "1.0",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "host_permissions": [
+    "http://localhost:3000/*"  
+  ],
+  "permissions": [
+    "storage",
+    "scripting"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["http://localhost:3000/profile"],  
+      "js": ["content.js"]
+    }
+  ]
+}

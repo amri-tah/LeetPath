@@ -24,12 +24,14 @@ const Login = () => {
   const handleSocialSignIn = async (provider) => {
     const auth = getAuth(app);
     try {
-      await signInWithPopup(auth, provider);
+      const userCredential = await signInWithPopup(auth, provider);
+      const token = await userCredential.user.getIdToken(); // Get Firebase ID token
+      localStorage.setItem('userToken', token); // Store the token in localStorage
       router.push("/profile");
     } catch (error) {
-      if(error.code==="auth/account-exists-with-different-credential"){
+      if(error.code === "auth/account-exists-with-different-credential") {
         setError("Account exists with a different credential. Please log in with that credential.");
-      }else{
+      } else {
         setError("Error signing in: " + error.message);
       }
     }
@@ -41,6 +43,8 @@ const Login = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       router.push("/profile");
+      const token = await userCredential.user.getIdToken(); // Get Firebase ID token
+      localStorage.setItem('userToken', token);
     } catch (error) {
       setError("Error with email authentication: " + error.message);
     }
