@@ -67,68 +67,68 @@ const Register = () => {
   };
 
   return (
-    <div className='bg-gray-900 flex flex-col items-center justify-center py-16 min-h-[80vh]'>
-      <div className='bg-white p-10 sm:p-12 md:p-14 rounded-lg shadow-lg w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl transition-all duration-300'>
-        <h1 className='text-3xl font-bold mb-8 text-center text-gray-800'>Sign Up</h1>
+    <div className="bg-gray-900 flex items-center justify-center min-h-screen py-8 px-4 sm:px-6 md:px-10">
+      <div className="bg-white p-6 sm:p-8 md:p-10 rounded-lg shadow-xl w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center text-gray-800">
+          Sign Up
+        </h1>
 
-        {error && <p className='text-red-500 text-center mb-6'>{error}</p>}
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
-        {/* Registration Form */}
-        <form onSubmit={handleEmailAuth} className='flex flex-col space-y-6'>
+        <form onSubmit={handleEmailAuth} className="flex flex-col space-y-4">
           <input
-            type='text'
+            type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder='Full Name'
-            className='px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
+            placeholder="Full Name"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
             required
           />
           <input
-            type='email'
+            type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder='Email'
-            className='px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
+            placeholder="Email"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
             required
           />
           <input
-            type='password'
+            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder='Password'
-            className='px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
+            placeholder="Password"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
             required
           />
           <input
-            type='password'
+            type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder='Confirm Password'
-            className='px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
+            placeholder="Confirm Password"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
             required
           />
 
           <button
-            type='submit'
-            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition duration-300 w-full text-lg'>
+            type="submit"
+            className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-300 text-sm sm:text-base">
             Sign Up
           </button>
         </form>
 
-        <p className='text-center my-6 text-gray-500'>OR</p>
+        <p className="text-center my-4 text-gray-500">OR</p>
 
-        {/* Google Sign-In Button */}
         <button
           onClick={handleGoogleSignIn}
-          className='bg-red-500 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl w-full transition duration-300 text-lg'>
+          className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-3 rounded-lg transition duration-300 text-sm sm:text-base">
           Sign Up with Google
         </button>
-        
-        <p className='text-center mt-6 text-gray-600'>
+
+        <p className="text-center mt-4 text-gray-600">
           Already have an account?{' '}
           <button
-            type='button'
-            className='text-blue-500 hover:underline'
+            type="button"
+            className="text-blue-500 hover:underline"
             onClick={() => router.push('/login')}>
             Sign In
           </button>
