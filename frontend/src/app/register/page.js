@@ -1,8 +1,9 @@
 'use client';
 import React, { useState } from 'react';
-import app from "../../../config.js"; // Ensure this path is correct for your setup
-import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'; 
+import app from "../../../config.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider, OAuthProvider } from 'firebase/auth'; 
 import { useRouter } from 'next/navigation';
+import { FaGoogle, FaGithub, FaFacebook, FaMicrosoft } from 'react-icons/fa';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -12,9 +13,8 @@ const Register = () => {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleGoogleSignIn = async () => {
+  const handleSocialSignIn = async (provider) => {
     const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
       const userEmail = result.user.email;
@@ -23,8 +23,12 @@ const Register = () => {
 
       router.push("/profile");
     } catch (error) {
-      setError("Error signing in with Google: " + error.message);
-    }
+      if(error.code==="auth/account-exists-with-different-credential"){
+        setError("Account exists with a different credential. Please log in with that credential.");
+      }else{
+        setError("Error signing in: " + error.message);
+      }
+    } 
   };
 
   const handleEmailAuth = async (e) => {
@@ -40,7 +44,7 @@ const Register = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const userEmail = userCredential.user.email;
 
-      await addUserToAPI(userEmail);
+      await addUserToAPI(userEmail); 
 
       router.push("/profile");
     } catch (error) {
@@ -67,68 +71,82 @@ const Register = () => {
   };
 
   return (
-    <div className="bg-gray-900 flex items-center justify-center min-h-screen py-8 px-4 sm:px-6 md:px-10">
-      <div className="bg-white p-6 sm:p-8 md:p-10 rounded-lg shadow-xl w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center text-gray-800">
-          Sign Up
-        </h1>
+    <div className='bg-gray-900 flex flex-col items-center justify-center py-[5%] min-h-screen px-4 md:px-8'>
+      <div className='bg-white p-6 sm:p-8 md:p-10 lg:p-12 rounded-lg shadow-lg max-w-sm sm:max-w-md lg:max-w-lg w-full'>
+        <h1 className='text-2xl font-bold mb-4 text-center'>Sign Up</h1>
 
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+        {error && <p className='text-red-500 text-center mb-4'>{error}</p>}
 
-        <form onSubmit={handleEmailAuth} className="flex flex-col space-y-4">
+        <form onSubmit={handleEmailAuth} className='flex flex-col space-y-4'>
           <input
-            type="text"
+            type='text'
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Full Name"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
+            placeholder='Full Name'
+            className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 w-full'
             required
           />
           <input
-            type="email"
+            type='email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
+            placeholder='Email'
+            className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 w-full'
             required
           />
           <input
-            type="password"
+            type='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
+            placeholder='Password'
+            className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 w-full'
             required
           />
           <input
-            type="password"
+            type='password'
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Confirm Password"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
+            placeholder='Confirm Password'
+            className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 w-full'
             required
           />
 
           <button
-            type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-300 text-sm sm:text-base">
+            type='submit'
+            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl transition duration-300 w-full'>
             Sign Up
           </button>
         </form>
 
-        <p className="text-center my-4 text-gray-500">OR</p>
+        <p className='text-center my-4'>OR</p>
 
-        <button
-          onClick={handleGoogleSignIn}
-          className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-3 rounded-lg transition duration-300 text-sm sm:text-base">
-          Sign Up with Google
-        </button>
-
-        <p className="text-center mt-4 text-gray-600">
-          Already have an account?{' '}
+        <div className="flex justify-center space-x-2">
           <button
-            type="button"
-            className="text-blue-500 hover:underline"
+            onClick={() => handleSocialSignIn(new GoogleAuthProvider())}
+            className='flex items-center justify-center bg-red-500 hover:bg-red-700 text-white font-bold w-12 h-12 rounded-lg transition duration-300'>
+            <FaGoogle className='text-lg' />
+          </button>
+          <button
+            onClick={() => handleSocialSignIn(new FacebookAuthProvider())}
+            className='flex items-center justify-center bg-blue-600 hover:bg-blue-800 text-white font-bold w-12 h-12 rounded-lg transition duration-300'>
+            <FaFacebook className='text-lg' />
+          </button>
+          <button
+            onClick={() => handleSocialSignIn(new GithubAuthProvider())}
+            className='flex items-center justify-center bg-gray-800 hover:bg-gray-900 text-white font-bold w-12 h-12 rounded-lg transition duration-300'>
+            <FaGithub className='text-lg' />
+          </button>
+          <button
+            onClick={() => handleSocialSignIn(new OAuthProvider('microsoft.com'))}
+            className='flex items-center justify-center bg-blue-500 hover:bg-blue-700 text-white font-bold w-12 h-12 rounded-lg transition duration-300'>
+            <FaMicrosoft className='text-lg' />
+          </button>
+        </div>
+        <p className='text-center mt-4'>
+          Already have an account?
+          <button
+            type='button'
+            className='text-blue-500 hover:underline ml-2'
             onClick={() => router.push('/login')}>
             Sign In
           </button>
