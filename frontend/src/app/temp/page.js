@@ -7,9 +7,8 @@ const Rec = () => {
   const [topProblems, setTopProblems] = useState([]);
 
   useEffect(() => {
-    // Extract the top 10 problems from the JSON data
-    const problems = Object.values(data) // Assuming `data` is an object
-      .slice(0, 10) // Get the first 10 elements
+    const problems = Object.values(data)
+      .slice(0, 10)
       .map((problem) => ({
         ...problem,
         solved: false,
@@ -35,68 +34,71 @@ const Rec = () => {
   };
 
   return (
-    <div className="bg-gray-900 py-10 px-[10%] text-white w-full flex items-center justify-center">
+    <div className="bg-gray-900 py-8 px-4 sm:px-6 md:px-10 text-white w-full flex items-center justify-center">
       <div className="mx-auto w-full text-black p-5 rounded-xl">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white flex items-center justify-center space-x-2">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white flex items-center justify-center space-x-2">
             <span>🚀</span>
             <span>Leetcode Question Recommender</span>
             <span>🧠</span>
           </h1>
-          <p className="text-gray-300 text-lg">
+          <p className="text-gray-300 text-sm sm:text-base lg:text-lg">
             Your personalized guide to mastering coding problems! 💻✨
           </p>
-          <div className="mt-5 bg-blue-600 text-white py-3 px-5 rounded-lg shadow-lg">
-            <p className="text-lg font-semibold">
-            📝 <strong>Note:</strong> This is just a sample UI. Please go to our <a target="_blank" href="https://github.com/amri-tah/LeetPath/tree/main"><u>Github Repository</u></a> to deploy the model by yourself. Cloud Services cost a lot man!!! 😭
-              </p>
+          <div className="mt-5 bg-blue-600 text-white py-2 sm:py-3 px-4 sm:px-5 rounded-lg shadow-lg">
+            <p className="text-sm sm:text-base font-semibold">
+              📝 <strong>Note:</strong> This is just a sample UI. Please visit our{' '}
+              <a
+                target="_blank"
+                href="https://github.com/amri-tah/LeetPath/tree/main"
+                className="underline"
+              >
+                Github Repository
+              </a>{' '}
+              to deploy the model by yourself. Cloud Services cost a lot man!!! 😭
+            </p>
           </div>
         </div>
-        <ul className="space-y-4">
+        <ul className="space-y-3 sm:space-y-4">
           {topProblems.map((problem, index) => (
             <li
               key={problem.questionId}
-              className="p-5 bg-gray-100 border border-gray-300 rounded-lg shadow-sm"
+              className="p-4 sm:p-5 bg-gray-100 border border-gray-300 rounded-lg shadow-sm"
             >
-              <div className="flex items-center justify-between mt-1">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-1">
                 <div>
                   <h2
-                    className="text-lg font-semibold cursor-pointer"
+                    className="text-sm sm:text-base lg:text-lg font-semibold cursor-pointer"
                     onClick={() => toggleExpanded(index)}
                   >
                     {index + 1}. {problem.title}
                   </h2>
-                  <div className="flex gap-1 items-center">
+                  <div className="flex flex-wrap gap-1 items-center mt-2">
                     <span
-                      className={`inline-block px-3 py-1 text-sm rounded text-white 
-                        ${
-                          problem.difficulty === 'easy'
-                            ? 'bg-green-500'
-                            : problem.difficulty === 'medium'
-                            ? 'bg-yellow-500'
-                            : 'bg-red-500'
-                        }`}
+                      className={`inline-block px-2 sm:px-3 py-1 text-xs sm:text-sm rounded text-white ${
+                        problem.difficulty === 'easy'
+                          ? 'bg-green-500'
+                          : problem.difficulty === 'medium'
+                          ? 'bg-yellow-500'
+                          : 'bg-red-500'
+                      }`}
                     >
-                      {problem.difficulty === 'easy'
-                        ? 'Easy'
-                        : problem.difficulty === 'medium'
-                        ? 'Medium'
-                        : 'Hard'}
+                      {problem.difficulty}
                     </span>
                     {problem.topics.map((topic, index) => (
                       <span
                         key={index}
-                        className="px-3 py-1 rounded border text-sm border-black bg-white text-black"
+                        className="px-2 sm:px-3 py-1 rounded border text-xs sm:text-sm border-black bg-white text-black"
                       >
                         {topic}
                       </span>
                     ))}
                   </div>
                 </div>
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-3 sm:space-x-4 mt-3 sm:mt-0">
                   <button
                     onClick={() => toggleSolved(index)}
-                    className={`py-1 px-3 rounded-lg text-white ${
+                    className={`py-1 px-3 rounded-lg text-xs sm:text-sm text-white ${
                       problem.solved ? 'bg-green-500' : 'bg-red-500'
                     }`}
                   >
@@ -106,9 +108,9 @@ const Rec = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     href={`${problem.link}`}
-                    className="flex items-center ml-auto"
+                    className="flex items-center"
                   >
-                    <FaArrowRight className="w-10 h-10 text-blue-500 -rotate-45" />
+                    <FaArrowRight className="text-blue-500 transform -rotate-45 w-4 h-4 sm:w-5 sm:h-5" />
                   </a>
                 </div>
               </div>
@@ -117,9 +119,8 @@ const Rec = () => {
                   problem.expanded ? 'max-h-screen' : 'max-h-0'
                 }`}
               >
-                <div className="mt-4">
+                <div className="mt-3">
                   <p
-                    className=""
                     dangerouslySetInnerHTML={{ __html: problem.question }}
                   />
                 </div>
