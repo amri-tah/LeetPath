@@ -1,6 +1,8 @@
 'use client';
 import React, { useState } from 'react';
-import app from "../../../config.js";
+
+import app from "../../../config.js"; // Ensure this path is correct for your setup
+
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider, OAuthProvider } from 'firebase/auth'; 
 import { useRouter } from 'next/navigation';
 import { FaGoogle, FaGithub, FaFacebook, FaMicrosoft } from 'react-icons/fa';
@@ -19,7 +21,7 @@ const Register = () => {
       const result = await signInWithPopup(auth, provider);
       const userEmail = result.user.email;
       console.log(userEmail);
-      await addUserToAPI(userEmail);
+      await addUserToAPI(userEmail); // Add user email to API
 
       router.push("/profile");
     } catch (error) {

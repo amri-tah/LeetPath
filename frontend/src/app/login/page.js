@@ -86,29 +86,38 @@ const Login = () => {
         <p className='text-center my-4'>OR</p>
 
         {/* Social Sign-In Buttons */}
+
         <div className="flex justify-center space-x-2 mb-4">
           <button
             onClick={() => handleSocialSignIn(new GoogleAuthProvider())}
             className='flex items-center justify-center bg-red-500 hover:bg-red-700 text-white font-bold w-10 h-10 sm:w-12 sm:h-12 rounded-lg transition duration-300'>
+
             <FaGoogle className='text-lg' />
           </button>
           <button
             onClick={() => handleSocialSignIn(new FacebookAuthProvider())}
+
             className='flex items-center justify-center bg-blue-600 hover:bg-blue-800 text-white font-bold w-10 h-10 sm:w-12 sm:h-12 rounded-lg transition duration-300'>
+
+
             <FaFacebook className='text-lg' />
           </button>
           <button
             onClick={() => handleSocialSignIn(new GithubAuthProvider())}
+
             className='flex items-center justify-center bg-blue-600 hover:bg-blue-800 text-white font-bold w-10 h-10 sm:w-12 sm:h-12 rounded-lg transition duration-300'>
+
             <FaGithub className='text-lg' />
           </button>
           <button
             onClick={() => handleSocialSignIn(new OAuthProvider('microsoft.com'))}
+
             className='flex items-center justify-center bg-blue-500 hover:bg-blue-700 text-white font-bold w-10 h-10 sm:w-12 sm:h-12 rounded-lg transition duration-300'>
             <FaMicrosoft className='text-lg sm:text-xl' />
           </button>
         </div>
         <p className='text-center mt-4 text-sm sm:text-base'>
+
           Don’t have an account?
           <button
             type='button'
