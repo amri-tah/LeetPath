@@ -92,73 +92,6 @@ const Profile = () => {
     }
   };
 
-  // const fetchImage = async (email) => {
-  //   const filename = email.replace('@', '-').replace('.', '-') + '.png';
-  //   try {
-  //     const response = await fetch('http://127.0.0.1:5000/download', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ filename }),
-  //     });
-  //     if (response.ok) {
-  //       const blob = await response.blob();
-  //       setImage(URL.createObjectURL(blob));
-  //     } else {
-  //       console.log("Failed to fetch image.");
-  //     }
-  //   } catch (error) {
-  //     console.log("Error fetching image:", error.message);
-  //   }
-  // };
-
-  // const handleImageUpload = async (event) => {
-  //   const file = event.target.files[0];
-  //   const filename = user.email.replace('@', '-').replace('.', '-') + '.png';
-  //   if (file && file.type.startsWith('image/')) {
-  //     setImage(URL.createObjectURL(file));
-  //     try {
-  //       const formData = new FormData();
-  //       formData.append('file', file);
-  //       formData.append('filename', filename);
-
-  //       const response = await fetch('http://127.0.0.1:5000/upload', {
-  //         method: 'POST',
-  //         body: formData,
-  //       });
-
-  //       if (!response.ok) {
-  //         console.log("Image upload failed.");
-  //       }
-  //     } catch (error) {
-  //       console.log('Error uploading image:', error.message);
-  //     }
-  //   } else {
-  //     alert('Please upload a valid image file');
-  //   }
-  // };
-
-  // const handleDeleteImage = async () => {
-  //   const filename = user.email.replace('@', '-').replace('.', '-') + '.png';
-  //   setImage(null);
-  //   try {
-  //     const response = await fetch('http://127.0.0.1:5000/delete', {
-  //       method: 'DELETE',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ filename }),
-  //     });
-
-  //     if (!response.ok) {
-  //       console.log("Failed to delete image.");
-  //     }
-  //   } catch (error) {
-  //     console.log("Error deleting image:", error.message);
-  //   }
-  // };
-
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -169,23 +102,20 @@ const Profile = () => {
   };
   const getUserData = async () => {
     try {
-      // Decode the token to get the email
       const token = localStorage.getItem("userToken");
       const decodedToken = jwtDecode(token);
-      const email = decodedToken?.email; // Assuming the email is available in the token
+      const email = decodedToken?.email;
 
       if (!email) {
         console.error("Email not found in the token");
         return;
       }
-
-      // Send the email to the backend
       const response = await fetch("http://127.0.0.1:8080/getUserData", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }), // Pass the email in the request body
+        body: JSON.stringify({ email }),
       });
 
       const data = await response.json();
@@ -194,8 +124,8 @@ const Profile = () => {
       if (data.status) {
         const { _id, ...filteredData } = data;
         setUserData(filteredData);
-        console.log("filtered data " + filteredData); // Set the filtered data in state
-        console.log(filteredData.username); // Replace `someProperty` with an actual property key
+        console.log("filtered data " + filteredData);
+        console.log(filteredData.username);
 
         console.log("setted user data value " + userData);
       } else {
@@ -205,42 +135,6 @@ const Profile = () => {
       console.log("Error fetching user data: ", error.message);
     }
   };
-
-  // UseEffect to log the updated userData after it is set
-
-  // const handleEditSave = async () => {
-  //   if (isEditing) {
-  //     try {
-  //       const response = await fetch('http://127.0.0.1:8080/updateUser', {
-  //         method: 'PATCH',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify(userData),
-  //       });
-  //       const data = await response.json();
-  //       if (data.status) {
-  //         setError('');
-  //         setNotification({ message: 'Profile updated successfully!', type: 'success' });
-  //         setIsEditing(false);
-  //         setTimeout(() => setNotification({ message: '', type: '' }), 3000);
-  //       } else {
-  //         setError('Failed to update user data.');
-  //         setNotification({ message: 'Failed to update user data.', type: 'error' });
-  //         setIsEditing(false);
-  //         setTimeout(() => setNotification({ message: '', type: '' }), 3000);
-  //       }
-  //     } catch (error) {
-  //       console.log("Error updating user data: ", error.message);
-  //       setError('An error occurred while updating.');
-  //       setNotification({ message: 'An error occurred while updating.', type: 'error' });
-  //       setIsEditing(false);
-  //       setTimeout(() => setNotification({ message: '', type: '' }), 3000);
-  //     }
-  //   } else {
-  //     setIsEditing(true);
-  //   }
-  // };
 
   if (loading) return;
   <p>Loading...</p>;
@@ -260,63 +154,11 @@ const Profile = () => {
             ) : (
               <IoPersonCircleOutline className="w-[80px] h-[80px] mx-auto" />
             )}
-            {/* <div className='flex items-center justify-center gap-10'>
-              {isEditing && (
-                <div>
-                  <button
-                    onClick={() => document.getElementById('fileInput').click()}
-                    className="bg-blue-500 text-white py-1 px-4 rounded-md hover:bg-blue-700 mr-2"
-                  >
-                    Upload Image
-                  </button>
-                  <button
-                    className="bg-red-500 text-white py-1 px-4 rounded-md hover:bg-red-700"
-                    onClick={handleDeleteImage}
-                  >
-                    Delete Image
-                  </button>
-                  <input
-                    id="fileInput"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleImageUpload}
-                  />
-                </div>
-              )}
-            </div> */}
             <p className="text-center mb-2 text-lg font-bold">
               Welcome, {userData.username}
             </p>
             {userData ? (
               <div className="flex flex-col">
-                {/* <div className='w-1/2 px-4'>
-                  <label className='block text-gray-700'>Username:</label>
-                  <input
-                    type='text'
-                    value={userData.username || ''}
-                    className='border p-2 w-full rounded-lg mb-4'
-                    readOnly={!isEditing}
-                    onChange={(e) => setUserData({ ...userData, username: e.target.value })}
-                  />
-                  <label className='block text-gray-700'>Name:</label>
-                  <input
-                    type='text'
-                    value={userData.name || ''}
-                    className='border p-2 w-full rounded-lg mb-4'
-                    readOnly={!isEditing}
-                    onChange={(e) => setUserData({ ...userData, name: e.target.value })}
-                  />
-                  <label className='block text-gray-700'>Institution:</label>
-                  <input
-                    type='text'
-                    value={userData.institution || ''}
-                    className='border p-2 w-full rounded-lg mb-4'
-                    readOnly={!isEditing}
-                    onChange={(e) => setUserData({ ...userData, institution: e.target.value })}
-                  />
-                  {error && <p className='text-red-500 text-sm'>{error}</p>}
-                </div> */}
                 <div className="w-full rounded-xl p-4">
                   <label className="block text-gray-700 mb-3 text-base font-bold text-center">
                     Solved Problems
@@ -336,12 +178,6 @@ const Profile = () => {
                     </div>
                   </div>
                   <div className="w-full flex-col space-y-2">
-                    {/* <button
-                      onClick={handleEditSave}
-                      className={`text-white font-bold py-2 px-4 rounded-xl transition duration-300 w-full mb-2 ${isEditing ? 'bg-orange-500 hover:bg-orange-700' : 'bg-blue-500 hover:bg-blue-700'}`}>
-                      {isEditing ? 'Save' : error ? 'Edit' : 'Edit'}
-                    </button> */}
-
                     <button
                       onClick={redirectToRec}
                       className="bg-green-500 hover:bg-green-700 text-gray-200 font-bold py-2 px-4 rounded-xl transition duration-300 w-full p-2 hover:text-white"

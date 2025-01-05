@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import data from "./data.json";
 import { useNavigate } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
-// import { useRouter } from 'next/navigation';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
 import { initializeApp } from "firebase/app";
@@ -24,7 +23,6 @@ const Rec = () => {
   const navigate = useNavigate();
   const [topProblems, setTopProblems] = useState([]);
   const [userData, setUserData] = useState(null);
-  //   const router = useRouter();
   const auth = getAuth(app);
   const [user, setUser] = useState(null);
   useEffect(() => {
@@ -153,12 +151,8 @@ const Rec = () => {
       <div className="mx-auto w-96 text-black p-5 rounded-xl">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white flex items-center justify-center space-x-2 mb-6 mt-4">
-            {/* <span>🚀</span> */}
             <span>Your Personalized Top 10 Recommendations 🧠</span>
           </h1>
-          {/* <p className="text-gray-300 text-lg mb-10">
-            Your personalized guide to mastering coding problems! 💻✨
-          </p> */}
         </div>
         <ul className="space-y-4">
           {topProblems.map((problem, index) => (
@@ -216,7 +210,6 @@ const Rec = () => {
                     href={`${problem.link}`}
                     className="flex items-center justify-center px-2 py-1 bg-green-500 text-white font-semibold rounded-lg shadow hover:bg-green-6=700"
                   >
-                    
                     <span>Solve</span>
                     <FaArrowRight className="w-3 h-3 -rotate-45 ml-2" />
                   </a>

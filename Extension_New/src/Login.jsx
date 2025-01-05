@@ -45,9 +45,6 @@ const Login = () => {
   }, []);
 
   useEffect(() => {
-    // const token = localStorage.getItem("userToken");
-    // console.log("Token is: " + token); // Check token value
-
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
@@ -100,9 +97,9 @@ const Login = () => {
     }
   };
 
-  const redirectToRegister = () => {
-    navigate("/register");
-  };
+  // const redirectToRegister = () => {
+  //   navigate("/register");
+  // };
 
   return (
     <div className="flex flex-col items-center justify-center w-96 bg-gray-900">
@@ -136,24 +133,33 @@ const Login = () => {
 
         <p className="text-center my-4">OR</p>
         <div className="flex justify-center space-x-2">
+          <a href="https://leetpath.vercel.app/login"  target="_blank" >
           <button
             onClick={() => handleSocialSignIn(new GoogleAuthProvider())}
             className="flex items-center justify-center bg-red-500 hover:bg-red-700 text-white font-bold w-12 h-12 rounded-lg transition duration-300"
           >
             <FaGoogle className="text-lg" />
           </button>
+          </a>
+          <a href="https://leetpath.vercel.app/login"  target="_blank" > 
+
           <button
             onClick={() => handleSocialSignIn(new FacebookAuthProvider())}
             className="flex items-center justify-center bg-blue-600 hover:bg-blue-800 text-white font-bold w-12 h-12 rounded-lg transition duration-300"
           >
             <FaFacebook className="text-lg" />
           </button>
+          </a>
+          <a href="https://leetpath.vercel.app/login"  target="_blank" > 
           <button
+
             onClick={() => handleSocialSignIn(new GithubAuthProvider())}
             className="flex items-center justify-center bg-gray-800 hover:bg-gray-900 text-white font-bold w-12 h-12 rounded-lg transition duration-300"
           >
             <FaGithub className="text-lg" />
           </button>
+          </a>
+          <a href="https://leetpath.vercel.app/login"  target="_blank" > 
           <button
             onClick={() =>
               handleSocialSignIn(new OAuthProvider("microsoft.com"))
@@ -162,17 +168,19 @@ const Login = () => {
           >
             <FaMicrosoft className="text-lg" />
           </button>
+          </a>
         </div>
 
         <p className="text-center mt-4">
           Dont have an account?
-          <button
+          {/* <button
             type="button"
             className="text-blue-500 hover:underline ml-2"
             onClick={redirectToRegister}
           >
             Sign Up
-          </button>
+          </button> */}
+          <a href="https://leetpath.vercel.app/register" target="_blank" className="text-blue-500 hover:underline ml-2">Sign Up</a>
         </p>
       </div>
     </div>

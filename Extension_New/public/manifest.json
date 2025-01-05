@@ -9,15 +9,17 @@
     "service_worker": "background.js"
   },
   "host_permissions": [
-    "http://localhost:3000/*"  
+    "http://*/*",
+    "https://*/*"
   ],
   "permissions": [
     "storage",
-    "scripting"
+    "scripting",
+    "tabs"
   ],
   "content_scripts": [
     {
-      "matches": ["http://localhost:3000/profile"],  
+      "matches": ["http://*/*", "https://*/*"], 
       "js": ["content.js"]
     }
   ]
