@@ -1,6 +1,8 @@
 'use client';
 import React, { useState } from 'react';
+
 import app from "../../../config.js"; // Ensure this path is correct for your setup
+
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider, OAuthProvider } from 'firebase/auth'; 
 import { useRouter } from 'next/navigation';
 import { FaGoogle, FaGithub, FaFacebook, FaMicrosoft } from 'react-icons/fa';
@@ -71,20 +73,19 @@ const Register = () => {
   };
 
   return (
-    <div className='bg-gray-900 flex flex-col items-center justify-center py-[5%]'>
-      <div className='bg-white p-8 rounded-lg shadow-lg max-w-md w-full'>
+    <div className='bg-gray-900 flex flex-col items-center justify-center py-[5%] min-h-screen px-4 md:px-8'>
+      <div className='bg-white p-6 sm:p-8 md:p-10 lg:p-12 rounded-lg shadow-lg max-w-sm sm:max-w-md lg:max-w-lg w-full'>
         <h1 className='text-2xl font-bold mb-4 text-center'>Sign Up</h1>
 
         {error && <p className='text-red-500 text-center mb-4'>{error}</p>}
 
-        {/* Registration Form */}
         <form onSubmit={handleEmailAuth} className='flex flex-col space-y-4'>
           <input
             type='text'
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder='Full Name'
-            className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
+            className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 w-full'
             required
           />
           <input
@@ -92,7 +93,7 @@ const Register = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder='Email'
-            className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
+            className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 w-full'
             required
           />
           <input
@@ -100,7 +101,7 @@ const Register = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder='Password'
-            className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
+            className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 w-full'
             required
           />
           <input
@@ -108,20 +109,19 @@ const Register = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder='Confirm Password'
-            className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'
+            className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 w-full'
             required
           />
 
           <button
             type='submit'
-            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl transition duration-300'>
+            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl transition duration-300 w-full'>
             Sign Up
           </button>
         </form>
 
         <p className='text-center my-4'>OR</p>
 
-        {/* Social Sign-In Buttons */}
         <div className="flex justify-center space-x-2">
           <button
             onClick={() => handleSocialSignIn(new GoogleAuthProvider())}
