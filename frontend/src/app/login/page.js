@@ -25,8 +25,8 @@ const Login = () => {
     const auth = getAuth(app);
     try {
       const userCredential = await signInWithPopup(auth, provider);
-      const token = await userCredential.user.getIdToken(); // Get Firebase ID token
-      localStorage.setItem('userToken', token); // Store the token in localStorage
+      const token = await userCredential.user.getIdToken(); 
+      localStorage.setItem('userToken', token);
       router.push("/profile");
     } catch (error) {
       if(error.code === "auth/account-exists-with-different-credential") {

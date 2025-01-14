@@ -78,7 +78,7 @@ const Rec = () => {
     const problem = topProblems[index];
     const email = user.email;
     console.log(email)
-    console.log(problem)
+    console.log("problem"+problem)
     if (!email) return;
 
     try {
