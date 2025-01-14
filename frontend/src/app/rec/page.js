@@ -12,7 +12,8 @@ const Rec = () => {
   const [userData, setUserData] = useState(null);
   const router = useRouter();
   const auth = getAuth(app);
-  const [user, setUser] = useState(null); 
+  const [user, setUser] = useState(null);
+
   useEffect(() => {
     const fetchUserData = async () => {
       const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -33,24 +34,19 @@ const Rec = () => {
             } else {
               console.error('Failed to fetch user data');
             }
-            console.log(userResponseData)
-            // Get solved questions from user data or default to a sample list
+
             const solvedQuestions = userResponseData.solved_questions || ["two-sum", "add-two-integers"];
-            console.log(solvedQuestions);
 
             const recResponse = await axios.post('http://127.0.0.1:5000/recommend', {
               solved_questions: solvedQuestions,
               count: 10,
             });
 
-            // Extract slugs from the recommendations
             const recommendedSlugs = recResponse.data.recommendations
               .map(([slug]) => slug)
               .slice(0, 10);
-            
-            console.log(recommendedSlugs)
-            // Filter the problems from `data.json` based on the slugs
-            const recommendedProblems = Object.values(data)  // Assuming data is an object
+
+            const recommendedProblems = Object.values(data)
               .filter((problem) => recommendedSlugs.includes(problem.titleSlug))
               .map((problem) => ({
                 ...problem,
@@ -58,49 +54,42 @@ const Rec = () => {
                 expanded: false,
               }));
 
-            // Set the recommended problems to the state
-            setTopProblems(recommendedProblems); 
-      } catch (error) {
+            setTopProblems(recommendedProblems);
+          } catch (error) {
             console.error('Error fetching user or recommendations:', error);
           }
         } else {
           router.push('/register');
         }
       });
-  
+
       return () => unsubscribe();
     };
-  
+
     fetchUserData();
   }, [auth, router]);
-  
+
   const toggleSolved = async (index) => {
     const problem = topProblems[index];
     const email = user.email;
-    console.log(email)
-    console.log("problem"+problem)
     if (!email) return;
 
     try {
       let response;
 
-      // If the question is solved, remove it
       if (problem.solved) {
         response = await axios.post('http://127.0.0.1:8080/removeSolvedQuestion', {
           email: email,
           question_slug: problem.titleSlug,
         });
       } else {
-        // Otherwise, add it
         response = await axios.post('http://127.0.0.1:8080/addSolvedQuestion', {
           email: email,
           question_slug: problem.titleSlug,
         });
       }
 
-      // Check if the operation was successful
       if (response.data.status) {
-        // Update the local state after API success
         setTopProblems((prevProblems) =>
           prevProblems.map((p, i) =>
             i === index ? { ...p, solved: !p.solved } : p
@@ -124,32 +113,32 @@ const Rec = () => {
 
   return (
     <div className="bg-gray-900 py-10 px-[10%] text-white w-full flex items-center justify-center">
-      <div className="mx-auto w-full text-black p-5 rounded-xl">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-white flex items-center justify-center space-x-2">
+      <div className="mx-auto w-full text-black p-5 rounded-xl bg-white shadow-lg">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-800 flex items-center justify-center space-x-2">
             <span>🚀</span>
             <span>Leetcode Question Recommender</span>
             <span>🧠</span>
           </h1>
-          <p className="text-gray-300 text-lg mb-10">
+          <p className="text-gray-600 text-lg mt-4">
             Your personalized guide to mastering coding problems! 💻✨
           </p>
         </div>
-        <ul className="space-y-4">
+        <ul className="space-y-6">
           {topProblems.map((problem, index) => (
             <li
               key={problem.questionId}
-              className="p-5 bg-gray-100 border border-gray-300 rounded-lg shadow-sm"
+              className="p-5 bg-gray-100 border border-gray-300 rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 ease-in-out"
             >
-              <div className="flex items-center justify-between mt-1">
+              <div className="flex items-center justify-between">
                 <div>
                   <h2
-                    className="text-lg font-semibold cursor-pointer"
+                    className="text-xl font-semibold cursor-pointer text-gray-800"
                     onClick={() => toggleExpanded(index)}
                   >
                     {index + 1}. {problem.title}
                   </h2>
-                  <div className="flex gap-1 items-center">
+                  <div className="flex gap-2 items-center mt-2 flex-wrap">
                     <span
                       className={`inline-block px-3 py-1 text-sm rounded text-white 
                         ${
@@ -166,7 +155,7 @@ const Rec = () => {
                         ? 'Medium'
                         : 'Hard'}
                     </span>
-                    {problem.topics.map((topic, index) => (
+                    {problem.topics.slice(0, 5).map((topic, index) => (
                       <span
                         key={index}
                         className="px-3 py-1 text-sm rounded border border-black bg-white text-black"
@@ -174,25 +163,30 @@ const Rec = () => {
                         {topic}
                       </span>
                     ))}
+                    {problem.topics.length > 5 && (
+                      <span className="text-blue-500">+{problem.topics.length - 5} more</span>
+                    )}
                   </div>
                 </div>
-                <div className="flex items-center space-x-4">
-                <button
+                <div className="flex items-center gap-4">
+                  <button
                     onClick={() => toggleSolved(index)}
-                    className={`py-1 px-3 rounded-lg text-white ${
+                    className={`py-2 px-4 rounded-lg text-white ${
                       problem.solved ? 'bg-green-500' : 'bg-red-500'
                     }`}
                   >
                     {problem.solved ? 'Mark Unsolved' : 'Mark Solved'}
                   </button>
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={`${problem.link}`}
-                    className="flex items-center ml-auto"
-                  >
-                    <FaArrowRight className="w-10 h-10 text-blue-500 -rotate-45" />
-                  </a>
+                  <div className="flex items-center gap-2">
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={`${problem.link}`}
+                      className="flex items-center text-blue-500 hover:text-blue-700 transition-all duration-200"
+                    >
+                      <FaArrowRight className="w-8 h-8 -rotate-45" />
+                    </a>
+                  </div>
                 </div>
               </div>
               <div
@@ -202,7 +196,7 @@ const Rec = () => {
               >
                 <div className="mt-4">
                   <p
-                    className=""
+                    className="text-gray-800"
                     dangerouslySetInnerHTML={{ __html: problem.question }}
                   />
                 </div>
